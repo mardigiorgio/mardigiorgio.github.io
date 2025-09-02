@@ -2,20 +2,20 @@
 <rss version="2.0">
   <channel>
     <title>Marco DiGiorgio</title>
-    <link>https://mardigiorgio.github.io</link>
+    <link>https://mardigiorgio.github.io/portfolio-site</link>
     <description>Software Engineer & Security tinkerer. I build fast, reliable systems and delightful web apps.</description>
   <item>
     <title><![CDATA[How I built a Pi WIDS]]></title>
-    <link>https://mardigiorgio.github.io/blog/how-i-built-pi-wids</link>
-    <guid>https://mardigiorgio.github.io/blog/how-i-built-pi-wids</guid>
+    <link>https://mardigiorgio.github.io/portfolio-site/blog/how-i-built-pi-wids</link>
+    <guid>https://mardigiorgio.github.io/portfolio-site/blog/how-i-built-pi-wids</guid>
     <pubDate>Sat, 10 May 2025 00:00:00 GMT</pubDate>
     <description><![CDATA[Capturing 802.11 frames on a Raspberry Pi and detecting anomalies.]]></description>
   </item>
 
   <item>
     <title><![CDATA[My path to Security+]]></title>
-    <link>https://mardigiorgio.github.io/blog/my-path-to-security-plus</link>
-    <guid>https://mardigiorgio.github.io/blog/my-path-to-security-plus</guid>
+    <link>https://mardigiorgio.github.io/portfolio-site/blog/my-path-to-security-plus</link>
+    <guid>https://mardigiorgio.github.io/portfolio-site/blog/my-path-to-security-plus</guid>
     <pubDate>Sun, 02 Mar 2025 00:00:00 GMT</pubDate>
     <description><![CDATA[Notes and resources I used to prepare for CompTIA Security+.]]></description>
   </item>
