@@ -1,0 +1,54 @@
+---
+title: "hsuScript Compiler"
+slug: "hsuscript"
+summary: "Educational C compiler demonstrating the full pipeline from lexing and parsing to runtime execution."
+tech: ["C", "Bash"]
+year: 2025
+tags: ["compiler","education","systems"]
+repo: "https://github.com/yourname/hsuScript"
+cover: "/images/projects/hsuscript/cover.jpg"
+---
+
+## Goals
+
+I built hsc to learn parsing, IR design, and register allocation. The compiler reads .hsc source, tokenizes it, builds an abstract syntax tree, performs semantic checks, lowers to a small SSA-like IR, allocates registers, and finally emits x86‑64 and links a tiny runtime that supplies write and exit.
+
+```c
+fn main() {
+  write("No Power Tools!");
+}
+```
+
+### Highlights
+
+- Pratt parser with line/column‑aware lexer
+- Semantic pass enforcing variable declarations and types
+- SSA-style IR plus naive register allocator and peephole optimizations
+- Assembler backend that writes ELF binaries and optional assembly dumps
+- Portable C runtime and comprehensive shell-based tests
+
+### Language Features
+
+- Variables declared with let
+- Arithmetic and boolean expressions
+- String literals
+- if/elif/else conditionals
+- for and while loops
+- User-defined functions
+- write(expr) for output, exit(code) to terminate
+
+### Project Structure
+
+- lexer.c – tokenizes source code
+- parser.c – builds the AST
+- sem.c – semantic analysis
+- codegen.c – emits machine code and links runtime
+- runtime/ – minimal standard library
+- tests/ – parser and execution fixtures
+- tools/ – build and test scripts
+
+### Getting Started
+
+- ./tools/build.sh – build the compiler
+- ./build/hsc path/to/file.hsc – run a script directly
+- ./build/hsc path/to/file.hsc --compile program – compile a script to a native binary

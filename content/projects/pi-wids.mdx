@@ -1,0 +1,31 @@
+---
+title: "WiPi Guardian"
+slug: "wipi-guardian"
+summary: "Raspberry Pi–focused wireless intrusion detection system with FastAPI backend and Svelte dashboard."
+tech: ["Python","FastAPI","Svelte","Tailwind CSS"]
+year: 2025
+tags: ["security","iot"]
+repo: "https://github.com/marcodigiorgio/WiPi-Guardian"
+cover: "/images/projects/wipi/cover.jpg"
+---
+
+## Overview
+
+WiPi Guardian is an in-progress wireless IDS tailored to Raspberry Pi deployments.
+A Scapy-based sniffer ingests 802.11 beacons, deauthentication, and disassociation frames, normalizes channel/band metadata, and batches them into a SQLite database for later analysis.
+The sensor loop analyzes recent events, flagging deauthentication floods scoped to a defended SSID and issuing rogue‑AP alerts when BSSIDs, channels, bands, or RSN capabilities deviate from policy.
+Alerts can be pushed to Discord or sent via SMTP, enabling remote notification.
+A FastAPI service exposes REST endpoints for health, overview counts, event queries, and policy updates, plus an SSE stream for near real‑time alert delivery and optional static UI hosting.
+The Svelte/Tailwind frontend shows live stats, lets you edit defense rules, and displays incoming alerts through the SSE channel
+
+### Features
+
+- Scapy-based 802.11 frame capture with channel/band inference and RSN parsing
+- Scoped deauthentication flood detection with cooldown and offender tracking
+- Rogue‑AP detection using BSSID/channel/band allowlists and RSN baselines
+- Discord webhook and SMTP email alerting modules
+- FastAPI backend with REST + SSE and optional static dashboard hosting
+- Svelte/Tailwind UI for overview metrics, defense configuration, and live alert stream
+
+![Dashboard](/images/projects/pi-wids/1.png)
+

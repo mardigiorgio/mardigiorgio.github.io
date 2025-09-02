@@ -1,0 +1,38 @@
+---
+title: "VEX Robotics Control System"
+slug: "vex-v5-control-system"
+summary: "Reusable control framework for VEX V5 robots with PID motion, odometry, and a touchscreen auton selector."
+tech: ["C++","VEXcode","PID"]
+year: 2023
+tags: ["robotics","embedded"]
+repo: "https://github.com/marcodigiorgio/vex-v5-control-system"
+cover: "/images/projects/vex-v5-control-system/cover.jpg"
+---
+
+## What it does
+
+Provides a modular drive chassis with PID tuning, field‑centric odometry, and a touchscreen interface to choose autonomous routines before a match.
+
+## Features
+
+- Drive class sets up left/right motor groups, inertial sensor, and optional tracking wheels.
+- Tunable PID loops for distance, turn, heading, and swing motions.
+- Odom module maintains X/Y field coordinates using tracking wheel feedback.
+- Pre‑auton screen lets you tap to cycle between test routines (drive, turn, odometry, full path).
+- Driver control helpers for arcade, tank, and holonomic drive styles.
+
+```cpp
+Drive chassis(
+    TANK_ONE_ROTATION,
+    motor_group(BLMotor, FLMotor, MLMotor),
+    motor_group(BRMotor, FRMotor, MRMotor),
+    PORT16,  // inertial sensor port
+    3.08,    // wheel diameter (in)
+    2.5,     // external gear ratio
+    360,     // gyro scale
+    PORT1, -PORT2, PORT3, -PORT4,      // drive motor ports (sign sets direction)
+    PORT5, 2.75, 1,                    // forward tracking wheel: port, diameter, offset
+    PORT5, 2.75, 5.2                   // sideways tracking wheel: port, diameter, offset
+);
+```
+
