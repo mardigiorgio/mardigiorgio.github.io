@@ -29,10 +29,25 @@ function getPosts() {
 function buildRSS(posts) {
   const items = posts
     .map(
-      (p) => `\n  <item>\n    <title><![CDATA[${p.title}]]></title>\n    <link>${siteConfig.url}/blog/${p.slug}</link>\n    <guid>${siteConfig.url}/blog/${p.slug}</guid>\n    <pubDate>${new Date(p.date).toUTCString()}</pubDate>\n    <description><![CDATA[${p.excerpt}]]></description>\n  </item>`
+      (p) => `
+  <item>
+    <title><![CDATA[${p.title}]]></title>
+    <link>${siteConfig.url}/blog/${p.slug}</link>
+    <guid>${siteConfig.url}/blog/${p.slug}</guid>
+    <pubDate>${new Date(p.date).toUTCString()}</pubDate>
+    <description><![CDATA[${p.excerpt}]]></description>
+  </item>`
     )
     .join('\n')
-  return `<?xml version="1.0" encoding="UTF-8" ?>\n<rss version="2.0">\n  <channel>\n    <title>${siteConfig.name}</title>\n    <link>${siteConfig.url}</link>\n    <description>${siteConfig.description}</description>${items}\n  </channel>\n</rss>\n`
+  return `<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title><![CDATA[${siteConfig.name}]]></title>
+    <link>${siteConfig.url}</link>
+    <description><![CDATA[${siteConfig.description}]]></description>${items}
+  </channel>
+</rss>
+`
 }
 
 const posts = getPosts()
