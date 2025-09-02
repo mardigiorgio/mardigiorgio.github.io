@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "rss": "node scripts/generate-rss.mjs",
-    "build": "pnpm rss && next build && next export",
+    "build": "pnpm rss && next build",
     "start": "serve -s out",
     "lint": "next lint"
   },

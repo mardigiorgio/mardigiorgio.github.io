@@ -1,12 +1,6 @@
-export const siteConfig = {
-  name: 'Marco DiGiorgio',
-  titleTemplate: 'Marco DiGiorgio — %s',
-  description:
-    'Software Engineer & Security tinkerer. I build fast, reliable systems and delightful web apps.',
-  url: 'https://mardigiorgio.github.io',
-  author: 'Marco DiGiorgio',
-  twitter: '@marco__dig',
-}
+import site from './site.config.json'
+
+export const siteConfig = site
 
 export function absoluteUrl(path = '/') {
   return new URL(path, siteConfig.url).toString()

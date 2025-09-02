@@ -1,7 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import { siteConfig } from '../lib/seo.js'
+const siteConfig = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), 'lib', 'site.config.json'), 'utf8')
+)
 
 const blogDir = path.join(process.cwd(), 'content', 'blog')
 const publicDir = path.join(process.cwd(), 'public')
@@ -38,4 +40,3 @@ const xml = buildRSS(posts)
 if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir)
 fs.writeFileSync(path.join(publicDir, 'rss.xml'), xml)
 console.log(`Generated public/rss.xml with ${posts.length} posts`)
-

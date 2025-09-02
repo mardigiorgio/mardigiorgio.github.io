@@ -1,7 +1,8 @@
 import Link from 'next/link'
+import type { Route } from 'next'
 import ThemeToggle from './ThemeToggle'
 
-const nav = [
+const nav: { href: Route; label: string }[] = [
   { href: '/', label: 'Home' },
   { href: '/projects', label: 'Projects' },
   { href: '/blog', label: 'Blog' },
@@ -28,4 +29,3 @@ export default function Navbar() {
     </header>
   )
 }
-
