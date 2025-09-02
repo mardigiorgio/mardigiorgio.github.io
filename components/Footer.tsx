@@ -1,4 +1,5 @@
 import socials from '@/data/socials.json'
+import Link from 'next/link'
 
 export default function Footer() {
   const year = new Date().getFullYear()
@@ -7,7 +8,7 @@ export default function Footer() {
       <div className="container-readable py-8 text-sm opacity-70 flex items-center justify-between">
         <p>© {year} Marco DiGiorgio</p>
         <div className="space-x-4">
-          <a href="/rss.xml" className="hover:underline">RSS</a>
+          <Link href="/rss.xml" className="hover:underline">RSS</Link>
           <a href={socials.github} target="_blank" rel="noreferrer" className="hover:underline">GitHub</a>
         </div>
       </div>

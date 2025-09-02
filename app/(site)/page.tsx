@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/Button'
 import ProjectCard from '@/components/ProjectCard'
 import PostCard from '@/components/PostCard'
 import { getAllProjects, getAllPosts } from '@/lib/content'
+import Link from 'next/link'
 
 export default function HomePage() {
   const projects = getAllProjects().slice(0, 3)
@@ -22,7 +23,7 @@ export default function HomePage() {
             </div>
             <div className="flex gap-3">
               <a href="#projects"><Button>View Projects</Button></a>
-              <a href="/contact"><Button variant="outline">Contact</Button></a>
+              <Link href="/contact"><Button variant="outline">Contact</Button></Link>
             </div>
             <div className="flex flex-wrap gap-2 mt-2 text-sm">
               <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Sophomore @ DePaul CS</span>
@@ -54,4 +55,3 @@ export default function HomePage() {
     </>
   )
 }
-
