@@ -13,9 +13,9 @@ export default function AboutPage() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/images/headshot.jpg" alt="Marco DiGiorgio" className="rounded-2xl w-48 h-48 object-cover" />
         <div className="md:col-span-2 space-y-4 opacity-90">
-          <p>Hi, I’m Marco — a software engineer who loves security, systems, and building delightful web apps.</p>
-          <p>I enjoy shipping fast, reliable software with clear UX and strong performance budgets.</p>
-          <p>Outside of code, I tinker with hardware, read RFCs, and hike.</p>
+          <p>Hi, I’m Marco — a computer science student and aspiring engineer who loves cybersecurity, backend development, and systems programming.</p>
+          <p>I’m fascinated by how computers work at every layer and enjoy building reliable, secure software that bridges low-level logic with real-world applications.</p>
+          <p>Outside of code, I play chess and dive into competitive video games like TF2 and other first-person titles.</p>
         </div>
       </div>
 

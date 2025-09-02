@@ -17,7 +17,7 @@ export default function HomePage() {
               <h1 className="text-3xl md:text-5xl font-semibold tracking-tight">Marco DiGiorgio</h1>
               <p className="mt-2 text-lg opacity-80">Software Engineer & Security tinkerer</p>
               <p className="mt-3 max-w-2xl opacity-80">
-                I build fast, reliable systems and delightful web apps.
+                I enjoy solving complex problems in systems and security.
               </p>
             </div>
             <div className="flex gap-3">
@@ -25,7 +25,8 @@ export default function HomePage() {
               <a href="/contact"><Button variant="outline">Contact</Button></a>
             </div>
             <div className="flex flex-wrap gap-2 mt-2 text-sm">
-              <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">5+ years coding</span>
+              <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Sophomore @ DePaul CS</span>
+              <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Cybersecurity & Systems Programming</span>
               <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Fav stack: Next.js + TS</span>
               <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Open to internships</span>
             </div>
