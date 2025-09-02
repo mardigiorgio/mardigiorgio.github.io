@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --radius: 1rem;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  @apply bg-white text-neutral-900 antialiased;
+}
+
+.dark body {
+  @apply bg-neutral-950 text-neutral-100;
+}
+
+.container-readable {
+  @apply max-w-3xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.card-base {
+  @apply rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-soft bg-white dark:bg-neutral-900;
+}
+
+.hover-lift {
+  @apply transition-transform duration-200 ease-out hover:-translate-y-0.5;
+}
+

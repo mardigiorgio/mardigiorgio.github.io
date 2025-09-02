@@ -1,0 +1,22 @@
+/* Prose overrides for typography */
+.prose {
+  @apply max-w-none text-neutral-800 dark:text-neutral-200;
+}
+.prose code { @apply rounded px-1 py-0.5 bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100; }
+.prose pre { @apply rounded-2xl border border-neutral-200 dark:border-neutral-800; }
+.prose img { @apply rounded-xl; }
+.prose h1, .prose h2, .prose h3 { @apply font-semibold tracking-tight; }
+.prose a { @apply underline decoration-neutral-300 hover:decoration-neutral-500 dark:decoration-neutral-700 dark:hover:decoration-neutral-400; }
+
+/* Line numbers for code blocks via rehype-pretty-code */
+.prose pre code { counter-reset: line; }
+.prose pre code .line { display: inline-block; min-height: 1rem; }
+.prose pre code .line::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 2ch;
+  margin-right: 1rem;
+  text-align: right;
+  color: rgb(115 115 115);
+}
