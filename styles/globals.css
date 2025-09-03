@@ -5,9 +5,9 @@
 :root {
   --radius: 1rem;
   /* Hello Intro theme tokens (tune colors + sizes) */
-  --hello-neon-start: #00e5ff;
-  --hello-neon-end: #00ffa3;
-  --hello-glow: #42f2ff;
+  --hello-neon-start: #000000; /* black neon for light mode */
+  --hello-neon-end: #000000;
+  --hello-glow: #000000;
   --hello-stroke-width: 6;
 }
 
@@ -22,9 +22,9 @@ body {
 }
 
 .dark:root {
-  --hello-neon-start: #5ee7ff;
-  --hello-neon-end: #7cffc8;
-  --hello-glow: #6be7ff;
+  --hello-neon-start: #ffffff; /* white neon for dark mode */
+  --hello-neon-end: #ffffff;
+  --hello-glow: #ffffff;
 }
 
 .container-readable {
