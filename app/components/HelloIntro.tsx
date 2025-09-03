@@ -2,6 +2,12 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 
+declare global {
+  interface Window {
+    finishIntro?: () => void
+  }
+}
+
 // Draw-once intro overlay that fetches and inlines /hello.svg,
 // animates path strokes, then fades out and unmounts.
 export default function HelloIntro() {
@@ -12,7 +18,7 @@ export default function HelloIntro() {
   const particlesRef = useRef<HTMLDivElement | null>(null)
 
   // Use a stable sessionStorage key
-  const storageKey = useMemo(() => "introSeen", [])
+  const storageKey = useMemo(() => "helloSeen", [])
   const reducedMotion = useMemo(() =>
     typeof window !== "undefined" && window.matchMedia
       ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -47,7 +53,7 @@ export default function HelloIntro() {
     } catch {
       // If anything goes wrong, don't block the site
       setShouldShow(false)
-      try { document.documentElement.classList.remove("hello-intro-pending") } catch {}
+      try { /* no-op */ } catch {}
     }
   }, [storageKey])
 
@@ -76,7 +82,7 @@ export default function HelloIntro() {
       if (!finished && !cancelled) {
         console.warn("hello-intro: watchdog triggered; revealing site")
         try { sessionStorage.setItem(storageKey, "1") } catch {}
-        try { clearPaintGate() } catch {}
+        try { window.finishIntro && window.finishIntro() } catch {}
         setFading(true)
         window.setTimeout(() => setShouldShow(false), 200)
       }
@@ -129,8 +135,7 @@ export default function HelloIntro() {
         mountRef.current.innerHTML = ""
         mountRef.current.appendChild(svgEl)
 
-        // Reveal the page by fading out the paint-gate overlay before starting the draw
-        try { clearPaintGate() } catch {}
+        // Note: the pre-hydration guard keeps main content hidden until finishIntro()
 
         // Add gradient defs and SVG glow filter (no CSS drop-shadow).
         const uid = `hello-${Math.random().toString(36).slice(2)}`
@@ -296,13 +301,13 @@ export default function HelloIntro() {
         try { sessionStorage.setItem(storageKey, "1") } catch {}
         if (!cancelled) {
           // Reveal site immediately on failure
-          try { clearPaintGate() } catch {}
+          try { window.finishIntro && window.finishIntro() } catch {}
           setFading(true)
           window.setTimeout(() => setShouldShow(false), 200)
         }
       } finally {
         finished = true
-        try { /* paint gate already cleared */ } catch {}
+        try { /* finishIntro called in success path */ } catch {}
       }
     }
 
@@ -328,8 +333,8 @@ export default function HelloIntro() {
         } catch {}
       }
 
-      // Reveal the site content by removing the pre-paint gate
-      try { /* paint gate already cleared */ } catch {}
+      // Reveal the site content via global finish hook
+      try { window.finishIntro && window.finishIntro() } catch {}
 
       setFading(true)
       // Wait ~400ms for fade-out
@@ -459,17 +464,11 @@ export default function HelloIntro() {
     return { x: px, y: py }
   }
 
-  function clearPaintGate() {
-    const gate = document.getElementById('__intro-gate') as HTMLDivElement | null
-    if (!gate) return
-    try { gate.style.opacity = '0' } catch {}
-    window.setTimeout(() => {
-      try { (window as any).__introGateFailOpen && (window as any).__introGateFailOpen() } catch {}
-    }, 320)
-  }
+  // paint gate handled by window.finishIntro()
 
   return (
     <div
+      id="hello-intro-root"
       ref={overlayRef}
       aria-hidden="true"
       className={`hello-intro hello-intro-root ${shouldShow ? "is-active" : ""} ${fading ? "is-fading" : ""}`}
@@ -497,8 +496,8 @@ export default function HelloIntro() {
           /* Allow glow to extend beyond SVG bounds */
           overflow: visible;
         }
-        /* Show overlay immediately when pre-paint gate is set on <html> */
-        html.hello-intro-pending .hello-intro { display: flex; }
+        /* Show overlay immediately when pre-hydration guard is active */
+        html[data-intro-pending] .hello-intro { display: flex; }
         /* Keep overlay visible while component is active (after we remove gate) */
         .hello-intro.is-active { display: flex; }
         .hello-intro::before {
