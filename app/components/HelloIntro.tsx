@@ -56,8 +56,10 @@ export default function HelloIntro() {
 
     async function run() {
       try {
-        const res = await fetch("/hello.svg", { signal: controller.signal })
-        if (!res.ok) throw new Error(`Failed to fetch /hello.svg: ${res.status}`)
+        // Resolve against document.baseURI so it works at / and /<repo>/
+        const svgUrl = new URL('hello.svg', document.baseURI).toString()
+        const res = await fetch(svgUrl, { signal: controller.signal, cache: 'no-store' })
+        if (!res.ok) throw new Error(`Failed to fetch ${svgUrl}: ${res.status}`)
         const text = await res.text()
 
         if (cancelled) return
@@ -66,7 +68,7 @@ export default function HelloIntro() {
         const parser = new DOMParser()
         const doc = parser.parseFromString(text, "image/svg+xml")
         const found = doc.querySelector("svg") as SVGSVGElement | null
-        if (!found) throw new Error("No <svg> root in /hello.svg")
+        if (!found) throw new Error("No <svg> root in hello.svg response")
 
         // Import into this document to ensure correct namespace
         svgEl = document.importNode(found, true) as SVGSVGElement

@@ -1,12 +1,17 @@
 /** @type {import('next').NextConfig} */
-const basePath = process.env.BASE_PATH || ''
-const assetPrefix = process.env.ASSET_PREFIX || basePath
+const repo = 'portfolio-site'
+const isProd = process.env.NODE_ENV === 'production'
 
 const nextConfig = {
+  // Static export for GitHub Pages
   output: 'export',
+  // Next/Image must be unoptimized for export
   images: { unoptimized: true },
-  basePath,
-  assetPrefix,
+  // Use basePath/assetPrefix on Pages so assets resolve under /<repo>/
+  basePath: isProd ? `/${repo}` : '',
+  assetPrefix: isProd ? `/${repo}` : '',
+  // Ensure GitHub Pages serves static files reliably
+  trailingSlash: true,
   experimental: {
     typedRoutes: true,
   },

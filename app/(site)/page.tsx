@@ -16,7 +16,7 @@ export default function HomePage() {
           <div className="flex flex-col gap-6">
             <div>
               <h1 className="text-3xl md:text-5xl font-semibold tracking-tight">Marco DiGiorgio</h1>
-              <p className="mt-2 text-lg opacity-80">Software Engineer & Security tinkerer</p>
+              <p className="mt-2 text-lg opacity-80">Software Engineer & Security Tinkerer</p>
               <p className="mt-3 max-w-2xl opacity-80">
                 I enjoy solving complex problems in systems and security.
               </p>
