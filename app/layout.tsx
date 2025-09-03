@@ -20,10 +20,11 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <script
           // Synchronously set the gate class before first paint, but only for homepage entry
           dangerouslySetInnerHTML={{
-            __html: `!function(){try{var drawn=sessionStorage.getItem('helloDrawn');if(drawn){return}var ENV_BASE=(typeof window!=='undefined' && window.__BASE_PATH__)||'${process.env.NEXT_PUBLIC_BASE_PATH||''}';
-var detectPrefix=function(){try{var scripts=document.getElementsByTagName('script');for(var i=0;i<scripts.length;i++){var src=scripts[i].getAttribute('src')||'';var j=src.indexOf('/_next/');if(j>0){return src.slice(0,j)}}}catch(e){}return ''};
-var base=ENV_BASE||detectPrefix()||'';if(base!==''){base=base.replace(/\/$/,'')}
-var path=window.location.pathname||'/';var isHome=(base===''? (path==='/'||path==='') : (path===base||path===base+'/'));
+            __html: `!function(){try{var drawn=sessionStorage.getItem('helloDrawn');if(drawn){return}var ENV_BASE='${process.env.NEXT_PUBLIC_BASE_PATH||''}';
+var fallbackBase=function(){try{var u=new URL(document.baseURI);var parts=u.pathname.split('/').filter(Boolean);return parts.length>0?('/'+parts[0]):''}catch(e){return ''}};
+var base=(ENV_BASE||fallbackBase()||'').replace(/\/$/,'');
+var path=window.location.pathname||'/';
+var isHome=(base===''? (path==='/'||path==='') : (path===base||path===base+'/'));
 if(isHome){document.documentElement.classList.add('hello-intro-pending')}}catch(e){}}();`,
           }}
         />

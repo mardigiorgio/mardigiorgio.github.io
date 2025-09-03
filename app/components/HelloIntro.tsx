@@ -23,20 +23,18 @@ export default function HelloIntro() {
   useEffect(() => {
     try {
       const drawn = typeof window !== "undefined" && sessionStorage.getItem(storageKey)
-      // Determine base path similar to pre-paint logic
+      // Determine base path similar to pre-paint logic (env then baseURI-derived)
       const envBase = (process.env.NEXT_PUBLIC_BASE_PATH || "") as string
-      const detectPrefix = () => {
+      const fallbackBase = () => {
         try {
-          const scripts = Array.from(document.scripts)
-          for (const s of scripts) {
-            const src = s.getAttribute("src") || ""
-            const i = src.indexOf("/_next/")
-            if (i > 0) return src.slice(0, i)
-          }
-        } catch {}
-        return ""
+          const u = new URL(document.baseURI)
+          const parts = u.pathname.split("/").filter(Boolean)
+          return parts.length > 0 ? `/${parts[0]}` : ""
+        } catch {
+          return ""
+        }
       }
-      let base = envBase || detectPrefix() || ""
+      let base = envBase || fallbackBase() || ""
       if (base !== "") base = base.replace(/\/$/, "")
       const path = window.location.pathname || "/"
       const isHome = base === "" ? path === "/" || path === "" : path === base || path === base + "/"
@@ -82,26 +80,23 @@ export default function HelloIntro() {
         setFading(true)
         window.setTimeout(() => setShouldShow(false), 200)
       }
-    }, reducedMotion ? 3500 : 6000)
+    }, reducedMotion ? 3500 : 6500)
 
     async function run() {
       try {
+        // Wait for full page load and fonts to avoid half-done starts
+        if (document.readyState !== "complete") {
+          await new Promise<void>((resolve) => window.addEventListener("load", () => resolve(), { once: true }))
+        }
+        if ((document as any).fonts && (document as any).fonts.ready) {
+          try { await (document as any).fonts.ready } catch {}
+        }
+        await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())))
         // Compute a robust prefix for GitHub Pages project sites.
         // Prefer deriving from any Next.js chunk <script> src (contains `/<basePath>/_next/...`).
         // Fallback to document.baseURI which works when landing at the site root.
-        const detectPrefix = () => {
-          try {
-            const scripts = Array.from(document.scripts)
-            for (const s of scripts) {
-              const src = s.getAttribute('src') || ''
-              const i = src.indexOf('/_next/')
-              if (i > 0) return src.slice(0, i)
-            }
-          } catch {}
-          return ''
-        }
-        const prefix = detectPrefix()
-        const svgUrl = (prefix ? `${prefix}/hello.svg` : new URL('hello.svg', document.baseURI).toString())
+        // Base-aware URL for SVG (works in dev and on Pages)
+        const svgUrl = new URL('hello.svg', document.baseURI).toString()
         const res = await fetch(svgUrl, { signal: controller.signal, cache: 'no-store' })
         if (!res.ok) throw new Error(`Failed to fetch ${svgUrl}: ${res.status}`)
         const text = await res.text()
