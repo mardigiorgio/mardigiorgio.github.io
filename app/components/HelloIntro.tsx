@@ -56,8 +56,22 @@ export default function HelloIntro() {
 
     async function run() {
       try {
-        // Resolve against document.baseURI so it works at / and /<repo>/
-        const svgUrl = new URL('hello.svg', document.baseURI).toString()
+        // Compute a robust prefix for GitHub Pages project sites.
+        // Prefer deriving from any Next.js chunk <script> src (contains `/<basePath>/_next/...`).
+        // Fallback to document.baseURI which works when landing at the site root.
+        const detectPrefix = () => {
+          try {
+            const scripts = Array.from(document.scripts)
+            for (const s of scripts) {
+              const src = s.getAttribute('src') || ''
+              const i = src.indexOf('/_next/')
+              if (i > 0) return src.slice(0, i)
+            }
+          } catch {}
+          return ''
+        }
+        const prefix = detectPrefix()
+        const svgUrl = (prefix ? `${prefix}/hello.svg` : new URL('hello.svg', document.baseURI).toString())
         const res = await fetch(svgUrl, { signal: controller.signal, cache: 'no-store' })
         if (!res.ok) throw new Error(`Failed to fetch ${svgUrl}: ${res.status}`)
         const text = await res.text()
