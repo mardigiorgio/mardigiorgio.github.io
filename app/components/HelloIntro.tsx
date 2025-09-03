@@ -456,13 +456,11 @@ export default function HelloIntro() {
     return { x: px, y: py }
   }
 
-  if (!shouldShow) return null
-
   return (
     <div
       ref={overlayRef}
       aria-hidden="true"
-      className={`hello-intro hello-intro-root ${fading ? "is-fading" : ""}`}
+      className={`hello-intro hello-intro-root ${shouldShow ? "is-active" : ""} ${fading ? "is-fading" : ""}`}
     >
       <div className="hello-intro__center">
         {/* SVG mounts here */}
@@ -474,7 +472,7 @@ export default function HelloIntro() {
           position: fixed;
           inset: 0;
           z-index: 9999;
-          display: flex;
+          display: none; /* hidden by default; shown when gating or active */
           align-items: center;
           justify-content: center;
           /* Inherit app background if defined; otherwise fallback */
@@ -487,6 +485,10 @@ export default function HelloIntro() {
           /* Allow glow to extend beyond SVG bounds */
           overflow: visible;
         }
+        /* Show overlay immediately when pre-paint gate is set on <html> */
+        html.hello-intro-pending .hello-intro { display: flex; }
+        /* Keep overlay visible while component is active (after we remove gate) */
+        .hello-intro.is-active { display: flex; }
         .hello-intro::before {
           content: '';
           position: absolute;
