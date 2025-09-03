@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Prose from './Prose'
 import { withBasePath } from '@/lib/basePath'
 
