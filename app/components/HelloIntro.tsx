@@ -12,7 +12,7 @@ export default function HelloIntro() {
   const particlesRef = useRef<HTMLDivElement | null>(null)
 
   // Use a stable sessionStorage key
-  const storageKey = useMemo(() => "helloDrawn", [])
+  const storageKey = useMemo(() => "introSeen", [])
   const reducedMotion = useMemo(() =>
     typeof window !== "undefined" && window.matchMedia
       ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -76,7 +76,7 @@ export default function HelloIntro() {
       if (!finished && !cancelled) {
         console.warn("hello-intro: watchdog triggered; revealing site")
         try { sessionStorage.setItem(storageKey, "1") } catch {}
-        try { document.documentElement.classList.remove("hello-intro-pending") } catch {}
+        try { clearPaintGate() } catch {}
         setFading(true)
         window.setTimeout(() => setShouldShow(false), 200)
       }
@@ -128,6 +128,9 @@ export default function HelloIntro() {
         // Clear anything existing
         mountRef.current.innerHTML = ""
         mountRef.current.appendChild(svgEl)
+
+        // Reveal the page by fading out the paint-gate overlay before starting the draw
+        try { clearPaintGate() } catch {}
 
         // Add gradient defs and SVG glow filter (no CSS drop-shadow).
         const uid = `hello-${Math.random().toString(36).slice(2)}`
@@ -293,13 +296,13 @@ export default function HelloIntro() {
         try { sessionStorage.setItem(storageKey, "1") } catch {}
         if (!cancelled) {
           // Reveal site immediately on failure
-          try { document.documentElement.classList.remove("hello-intro-pending") } catch {}
+          try { clearPaintGate() } catch {}
           setFading(true)
           window.setTimeout(() => setShouldShow(false), 200)
         }
       } finally {
         finished = true
-        try { document.documentElement.classList.remove("hello-intro-pending") } catch {}
+        try { /* paint gate already cleared */ } catch {}
       }
     }
 
@@ -326,7 +329,7 @@ export default function HelloIntro() {
       }
 
       // Reveal the site content by removing the pre-paint gate
-      try { document.documentElement.classList.remove("hello-intro-pending") } catch {}
+      try { /* paint gate already cleared */ } catch {}
 
       setFading(true)
       // Wait ~400ms for fade-out
@@ -454,6 +457,15 @@ export default function HelloIntro() {
     const px = rect.left + (x - vb.x) * sx
     const py = rect.top + (y - vb.y) * sy
     return { x: px, y: py }
+  }
+
+  function clearPaintGate() {
+    const gate = document.getElementById('__intro-gate') as HTMLDivElement | null
+    if (!gate) return
+    try { gate.style.opacity = '0' } catch {}
+    window.setTimeout(() => {
+      try { (window as any).__introGateFailOpen && (window as any).__introGateFailOpen() } catch {}
+    }, 320)
   }
 
   return (

@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import Script from 'next/script'
 import IntroGateClient from './components/IntroGateClient'
+import HelloIntro from './components/HelloIntro'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
       </head>
       <body className={inter.className}>
         <IntroGateClient />
+        <HelloIntro />
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
