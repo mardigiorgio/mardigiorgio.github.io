@@ -94,13 +94,17 @@ export default function HelloIntro() {
           if (w > 0 && h > 0) svgEl.setAttribute("viewBox", `0 0 ${w} ${h}`)
         }
 
+        // Allow glow to render outside the SVG viewport.
+        // Note: Using overflow visible prevents rectangular clipping on iOS during animation.
+        svgEl.setAttribute("overflow", "visible")
+
         // Append it under the mount
         if (!mountRef.current) return
         // Clear anything existing
         mountRef.current.innerHTML = ""
         mountRef.current.appendChild(svgEl)
 
-        // Add gradient defs and optional glow
+        // Add gradient defs and SVG glow filter (no CSS drop-shadow).
         const uid = `hello-${Math.random().toString(36).slice(2)}`
         const defs = ((): SVGDefsElement => {
           let d = svgEl!.querySelector("defs") as SVGDefsElement | null
@@ -128,6 +132,57 @@ export default function HelloIntro() {
         gradient.appendChild(stop2)
         defs.appendChild(gradient)
 
+        // Neon glow filter with expanded region to avoid clipping on mobile.
+        // Tune: pad controls extra space around the viewBox; increase if glow is cut off.
+        const glowId = `helloGlow-${uid}`
+        const filter = document.createElementNS("http://www.w3.org/2000/svg", "filter")
+        filter.setAttribute("id", glowId)
+        filter.setAttribute("filterUnits", "userSpaceOnUse") // stable region, not tied to path bbox
+        filter.setAttribute("color-interpolation-filters", "sRGB")
+        const vb = svgEl.viewBox.baseVal
+        const pad = 0.5 // 50% of viewBox on each side; lower to 0.25 if you need less
+        const fx = vb.x - vb.width * pad
+        const fy = vb.y - vb.height * pad
+        const fw = vb.width * (1 + pad * 2)
+        const fh = vb.height * (1 + pad * 2)
+        filter.setAttribute("x", String(fx))
+        filter.setAttribute("y", String(fy))
+        filter.setAttribute("width", String(fw))
+        filter.setAttribute("height", String(fh))
+
+        // Performance: prefer a few moderate blurs over a single huge blur.
+        // Reduced motion: use a lighter glow.
+        const blur1 = document.createElementNS("http://www.w3.org/2000/svg", "feGaussianBlur")
+        blur1.setAttribute("in", "SourceGraphic")
+        blur1.setAttribute("stdDeviation", reducedMotion ? "0.75" : "2")
+        blur1.setAttribute("result", "blur1")
+        const blur2 = document.createElementNS("http://www.w3.org/2000/svg", "feGaussianBlur")
+        blur2.setAttribute("in", "blur1")
+        blur2.setAttribute("stdDeviation", reducedMotion ? "1.25" : "4")
+        blur2.setAttribute("result", "blur2")
+        const blur3 = document.createElementNS("http://www.w3.org/2000/svg", "feGaussianBlur")
+        blur3.setAttribute("in", "blur2")
+        blur3.setAttribute("stdDeviation", reducedMotion ? "1.5" : "8")
+        blur3.setAttribute("result", "blur3")
+        const merge = document.createElementNS("http://www.w3.org/2000/svg", "feMerge")
+        const mn3 = document.createElementNS("http://www.w3.org/2000/svg", "feMergeNode")
+        mn3.setAttribute("in", "blur3")
+        const mn2 = document.createElementNS("http://www.w3.org/2000/svg", "feMergeNode")
+        mn2.setAttribute("in", "blur2")
+        const mn1 = document.createElementNS("http://www.w3.org/2000/svg", "feMergeNode")
+        mn1.setAttribute("in", "blur1")
+        const msrc = document.createElementNS("http://www.w3.org/2000/svg", "feMergeNode")
+        msrc.setAttribute("in", "SourceGraphic")
+        merge.appendChild(mn3)
+        merge.appendChild(mn2)
+        merge.appendChild(mn1)
+        merge.appendChild(msrc)
+        filter.appendChild(blur1)
+        filter.appendChild(blur2)
+        filter.appendChild(blur3)
+        filter.appendChild(merge)
+        defs.appendChild(filter)
+
         // Collect paths and set defaults if missing
         const paths = Array.from(svgEl.querySelectorAll("path"))
         if (paths.length === 0) {
@@ -145,11 +200,19 @@ export default function HelloIntro() {
           if (!p.hasAttribute("stroke-linejoin")) p.setAttribute("stroke-linejoin", "round")
         }
 
-        // Add strong neon glow via layered drop-shadows (CSS filter) unless reduced motion
-        if (!reducedMotion) {
-          const glow = `drop-shadow(0 0 1px var(--hello-glow)) drop-shadow(0 0 6px var(--hello-glow)) drop-shadow(0 0 14px var(--hello-glow)) drop-shadow(0 0 28px var(--hello-glow))`
-          ;(svgEl as SVGSVGElement).style.filter = glow
+        // Wrap all strokes in a stable group with the SVG filter.
+        // Important: apply the filter to a parent group so the region is stable
+        // while dashoffset animates on the child paths.
+        const strokeGroup = document.createElementNS("http://www.w3.org/2000/svg", "g")
+        strokeGroup.setAttribute("id", `helloStroke-${uid}`)
+        if (!reducedMotion) strokeGroup.setAttribute("filter", `url(#${glowId})`)
+        // Move path nodes into the group (preserves references in `paths`).
+        for (const p of paths) {
+          const parent = p.parentNode
+          if (parent) parent.removeChild(p)
+          strokeGroup.appendChild(p)
         }
+        svgEl.appendChild(strokeGroup)
 
         // Prepare stroke-dash animations
         const lengths = paths.map((p) => {
@@ -399,8 +462,8 @@ export default function HelloIntro() {
           transition: opacity 400ms ease;
           /* Don't block interactions to avoid focus traps */
           pointer-events: none;
-          /* Subtle grain */
-          overflow: hidden;
+          /* Allow glow to extend beyond SVG bounds */
+          overflow: visible;
         }
         .hello-intro::before {
           content: '';
