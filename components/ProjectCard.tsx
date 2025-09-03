@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { withBasePath } from '@/lib/basePath'
 import { Card, CardContent, CardHeader } from './ui/Card'
 import Badge from './ui/Badge'
 import { ArrowUpRight } from 'lucide-react'
@@ -12,12 +13,13 @@ type Props = {
 }
 
 export default function ProjectCard({ title, summary, tech, slug, cover }: Props) {
+  const coverSrc = withBasePath(cover) as string | undefined
   return (
     <Link href={`/projects/${slug}`} className="block hover-lift">
       <Card className="overflow-hidden h-full">
-        {cover ? (
+        {coverSrc ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={cover} alt="" className="h-40 w-full object-cover" />
+          <img src={coverSrc} alt="" className="h-40 w-full object-cover" />
         ) : null}
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
@@ -37,4 +39,3 @@ export default function ProjectCard({ title, summary, tech, slug, cover }: Props
     </Link>
   )
 }
-
