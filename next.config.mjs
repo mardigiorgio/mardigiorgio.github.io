@@ -12,6 +12,10 @@ const nextConfig = {
   assetPrefix: isProd ? `/${repo}` : '',
   // Ensure GitHub Pages serves static files reliably
   trailingSlash: true,
+  // Expose base path to the client for pre-paint gating and URL resolution
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isProd ? `/${repo}` : '',
+  },
   experimental: {
     typedRoutes: true,
   },

@@ -19,18 +19,37 @@ export default function HelloIntro() {
       : false
   , [])
 
-  // Decide whether to show on mount
+  // Decide whether to show on mount: only on homepage entry and if not drawn this session
   useEffect(() => {
     try {
       const drawn = typeof window !== "undefined" && sessionStorage.getItem(storageKey)
-      if (drawn) {
+      // Determine base path similar to pre-paint logic
+      const envBase = (process.env.NEXT_PUBLIC_BASE_PATH || "") as string
+      const detectPrefix = () => {
+        try {
+          const scripts = Array.from(document.scripts)
+          for (const s of scripts) {
+            const src = s.getAttribute("src") || ""
+            const i = src.indexOf("/_next/")
+            if (i > 0) return src.slice(0, i)
+          }
+        } catch {}
+        return ""
+      }
+      let base = envBase || detectPrefix() || ""
+      if (base !== "") base = base.replace(/\/$/, "")
+      const path = window.location.pathname || "/"
+      const isHome = base === "" ? path === "/" || path === "" : path === base || path === base + "/"
+
+      if (drawn || !isHome) {
         setShouldShow(false)
       } else {
         setShouldShow(true)
       }
     } catch {
-      // If sessionStorage is unavailable, just show once for this render
-      setShouldShow(true)
+      // If anything goes wrong, don't block the site
+      setShouldShow(false)
+      try { document.documentElement.classList.remove("hello-intro-pending") } catch {}
     }
   }, [storageKey])
 
@@ -53,6 +72,17 @@ export default function HelloIntro() {
     const animations: Animation[] = []
     let svgEl: SVGSVGElement | null = null
     let stopParticles: (() => void) | null = null
+    let finished = false
+    // Watchdog: ensure we never keep the page hidden if something stalls
+    const watchdog = window.setTimeout(() => {
+      if (!finished && !cancelled) {
+        console.warn("hello-intro: watchdog triggered; revealing site")
+        try { sessionStorage.setItem(storageKey, "1") } catch {}
+        try { document.documentElement.classList.remove("hello-intro-pending") } catch {}
+        setFading(true)
+        window.setTimeout(() => setShouldShow(false), 200)
+      }
+    }, reducedMotion ? 3500 : 6000)
 
     async function run() {
       try {
@@ -265,18 +295,16 @@ export default function HelloIntro() {
         await fadeAndDone()
       } catch (err) {
         // On any error, ensure we still set the flag and hide
-        try {
-          sessionStorage.setItem(storageKey, "1")
-        } catch {}
+        try { sessionStorage.setItem(storageKey, "1") } catch {}
         if (!cancelled) {
           // Reveal site immediately on failure
-          try {
-            document.documentElement.classList.remove("hello-gate")
-          } catch {}
+          try { document.documentElement.classList.remove("hello-intro-pending") } catch {}
           setFading(true)
-          // Small timeout to allow CSS transition to apply, then unmount
-          window.setTimeout(() => setShouldShow(false), 400)
+          window.setTimeout(() => setShouldShow(false), 200)
         }
+      } finally {
+        finished = true
+        try { document.documentElement.classList.remove("hello-intro-pending") } catch {}
       }
     }
 
@@ -303,9 +331,7 @@ export default function HelloIntro() {
       }
 
       // Reveal the site content by removing the pre-paint gate
-      try {
-        document.documentElement.classList.remove("hello-gate")
-      } catch {}
+      try { document.documentElement.classList.remove("hello-intro-pending") } catch {}
 
       setFading(true)
       // Wait ~400ms for fade-out
@@ -318,6 +344,7 @@ export default function HelloIntro() {
     return () => {
       cancelled = true
       controller.abort()
+      window.clearTimeout(watchdog)
       animations.forEach((a) => {
         try {
           a.cancel()
