@@ -4,6 +4,11 @@
 
 :root {
   --radius: 1rem;
+  /* Hello Intro theme tokens (tune colors + sizes) */
+  --hello-neon-start: #00e5ff;
+  --hello-neon-end: #00ffa3;
+  --hello-glow: #42f2ff;
+  --hello-stroke-width: 6;
 }
 
 html { scroll-behavior: smooth; }
@@ -14,6 +19,12 @@ body {
 
 .dark body {
   @apply bg-neutral-950 text-neutral-100;
+}
+
+.dark:root {
+  --hello-neon-start: #5ee7ff;
+  --hello-neon-end: #7cffc8;
+  --hello-glow: #6be7ff;
 }
 
 .container-readable {
@@ -27,4 +38,3 @@ body {
 .hover-lift {
   @apply transition-transform duration-200 ease-out hover:-translate-y-0.5;
 }
-
