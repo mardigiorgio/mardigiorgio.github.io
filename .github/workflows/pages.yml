@@ -37,6 +37,8 @@ jobs:
       - name: Build
         run: pnpm build
         env:
+          # Ensure Next gets the correct base path for GitHub Pages project sites
+          NEXT_PUBLIC_BASE_PATH: /portfolio-site
           BASE_PATH: /portfolio-site
           ASSET_PREFIX: /portfolio-site
       - name: Prepare out

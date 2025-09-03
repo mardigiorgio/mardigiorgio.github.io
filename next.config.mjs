@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
+// Support either NEXT_PUBLIC_BASE_PATH or BASE_PATH for convenience
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || process.env.BASE_PATH || ''
 
 const nextConfig = {
   output: 'export',
@@ -11,4 +12,3 @@ const nextConfig = {
 }
 
 export default nextConfig
-

@@ -16,7 +16,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
           {`(function(){try{
             var seen=false;try{seen=sessionStorage.getItem('introSeen')==='1'}catch(e){}
             if(seen)return;
-            var ENV_BASE='${process.env.NEXT_PUBLIC_BASE_PATH || ''}';
+            var ENV_BASE='${process.env.NEXT_PUBLIC_BASE_PATH || process.env.BASE_PATH || ''}';
             var trim=function(s){return (s||'').replace(/\/$/,'')};
             var fb=function(){try{var u=new URL(document.baseURI);return trim(u.pathname)}catch(e){return ''}};
             var base=trim(ENV_BASE||fb());
