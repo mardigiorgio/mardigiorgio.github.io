@@ -13,19 +13,19 @@ export default function HomePage() {
     <>
       <Section>
         <AnimatedFade>
-          <div className="flex flex-col gap-6">
-            <div>
+          <div className="flex flex-col gap-6 md:items-center">
+            <div className="md:text-center">
               <h1 className="text-3xl md:text-5xl font-semibold tracking-tight">Marco DiGiorgio</h1>
               <p className="mt-2 text-lg opacity-80">Software Engineer & Security Tinkerer</p>
-              <p className="mt-3 max-w-2xl opacity-80">
+              <p className="mt-3 max-w-2xl opacity-80 md:mx-auto">
                 I enjoy solving complex problems in systems and security.
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 md:justify-center">
               <a href="#projects"><Button>View Projects</Button></a>
               <Link href="/contact"><Button variant="outline">Contact</Button></Link>
             </div>
-            <div className="flex flex-wrap gap-2 mt-2 text-sm">
+            <div className="flex flex-wrap gap-2 mt-2 text-sm md:justify-center">
               <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Sophomore @ DePaul CS</span>
               <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Cybersecurity & Systems Programming</span>
               <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Fav stack: Next.js + TS</span>
