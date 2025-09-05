@@ -8,8 +8,8 @@ export default function ProjectsPage() {
   return (
     <>
       <Section>
-        <h1 className="text-2xl font-semibold tracking-tight">Projects</h1>
-        <p className="opacity-80 mt-2">Filter by tag to explore my work.</p>
+        <h1 className="text-2xl font-semibold tracking-tight text-center">Projects</h1>
+        <p className="opacity-80 mt-2 text-center">Filter by tag to explore my work.</p>
       </Section>
       <ProjectsClient projects={projects} tags={tags} />
     </>

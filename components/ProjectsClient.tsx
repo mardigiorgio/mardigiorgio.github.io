@@ -14,7 +14,7 @@ export default function ProjectsClient({ projects, tags }: { projects: Project[]
 
   return (
     <Section>
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="mt-4 flex flex-wrap gap-2 justify-center">
         <TagPill tag="all" active={!active} onClick={() => setActive(null)} />
         {tags.map((t) => (
           <TagPill key={t} tag={t} active={active === t} onClick={() => setActive(t)} />
@@ -28,4 +28,3 @@ export default function ProjectsClient({ projects, tags }: { projects: Project[]
     </Section>
   )
 }
-

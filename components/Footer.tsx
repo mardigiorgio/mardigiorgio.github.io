@@ -1,4 +1,3 @@
-import socials from '@/data/socials.json'
 import Link from 'next/link'
 import type { Route } from 'next'
 
@@ -10,6 +9,14 @@ export default function Footer() {
         <p>© {year} Marco DiGiorgio</p>
         <div className="space-x-4">
           <Link href={'/rss.xml' as Route} className="hover:underline">RSS</Link>
+          <a
+            href="https://github.com/mardigiorgio/portfolio-site"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline"
+          >
+            Source
+          </a>
         </div>
       </div>
     </footer>
