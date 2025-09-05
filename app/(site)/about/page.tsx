@@ -1,6 +1,11 @@
 import Section from '@/components/Section'
 import { withBasePath } from '@/lib/basePath'
 import skills from '@/data/skills.json'
+import SkillsGrid from '@/components/SkillsGrid'
+
+type SkillLevel = 'Proficient' | 'Experienced' | 'Familiar'
+type SkillItem = { name: string; level: SkillLevel }
+type SkillGroup = { category: string; items: SkillItem[] }
 
 export const metadata = {
   title: 'Marco DiGiorgio — About',
@@ -22,26 +27,7 @@ export default function AboutPage() {
 
       <div className="mt-10">
         <h2 className="text-xl font-semibold">Skills</h2>
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {(skills as any[]).map((group) => (
-            <div key={group.category} className="card-base p-4">
-              <h3 className="font-medium mb-3">{group.category}</h3>
-              <ul className="space-y-3">
-                {group.items.map((item: any) => (
-                  <li key={item.name} className="">
-                    <div className="flex items-center justify-between text-sm mb-1">
-                      <span>{item.name}</span>
-                      <span className="opacity-60">{item.stars}/5</span>
-                    </div>
-                    <div className="h-2 rounded-full bg-neutral-100 dark:bg-neutral-800 overflow-hidden" role="progressbar" aria-label={`${item.name} proficiency`} aria-valuemin={0} aria-valuemax={5} aria-valuenow={item.stars}>
-                      <div className="h-full bg-neutral-900 dark:bg-white" style={{ width: `${Math.max(0, Math.min(5, item.stars)) * 20}%` }} />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+        <SkillsGrid groups={skills as SkillGroup[]} />
       </div>
     </Section>
   )
