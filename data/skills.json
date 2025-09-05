@@ -1,43 +1,14 @@
 [
   {
-    "category": "Embedded Systems & Control",
-    "items": [
-      { "name": "Embedded Systems", "stars": 3 },
-      { "name": "Control Systems Design", "stars": 3 },
-      { "name": "Proportional-Integral-Derivative (PID)", "stars": 3 },
-      { "name": "vex-v5-control-system", "stars": 3 }
-    ]
-  },
-  {
     "category": "Programming Languages",
     "items": [
-      { "name": "Assembly Language", "stars": 3 },
+      { "name": "Python", "stars": 5 },
       { "name": "Bash", "stars": 4 },
       { "name": "C++", "stars": 3 },
-      { "name": "C (Programming Language)", "stars": 3 },
-      { "name": "Python (Programming Language)", "stars": 5 },
+      { "name": "C", "stars": 3 },
       { "name": "Java", "stars": 3 },
-      { "name": "SQL", "stars": 3 }
-    ]
-  },
-  {
-    "category": "Software Engineering",
-    "items": [
-      { "name": "Compiler Construction", "stars": 3 },
-      { "name": "Parsing", "stars": 3 },
-      { "name": "Data Structures", "stars": 4 },
-      { "name": "Databases", "stars": 3 },
-      { "name": "Test-Driven Development", "stars": 3 },
-      { "name": "hsuScript", "stars": 3 }
-    ]
-  },
-  {
-    "category": "Security & Networking",
-    "items": [
-      { "name": "Nmap", "stars": 3 },
-      { "name": "Splunk", "stars": 3 },
-      { "name": "Wireshark", "stars": 3 },
-      { "name": "Metasploit", "stars": 3 }
+      { "name": "SQL", "stars": 3 },
+      { "name": "Assembly", "stars": 3 }
     ]
   },
   {
@@ -45,6 +16,33 @@
     "items": [
       { "name": "Linux", "stars": 5 },
       { "name": "Windows", "stars": 3 }
+    ]
+  },
+  {
+    "category": "Security & Networking",
+    "items": [
+      { "name": "Wireshark", "stars": 3 },
+      { "name": "Nmap", "stars": 3 },
+      { "name": "Metasploit", "stars": 3 },
+      { "name": "Splunk", "stars": 3 }
+    ]
+  },
+  {
+    "category": "Software Engineering",
+    "items": [
+      { "name": "Data Structures", "stars": 4 },
+      { "name": "Databases", "stars": 3 },
+      { "name": "Compiler Construction", "stars": 3 },
+      { "name": "Parsing", "stars": 3 },
+      { "name": "Test-Driven Development", "stars": 3 }
+    ]
+  },
+  {
+    "category": "Embedded Systems & Control",
+    "items": [
+      { "name": "Embedded Systems", "stars": 3 },
+      { "name": "Control Systems Design", "stars": 3 },
+      { "name": "PID Control", "stars": 3 }
     ]
   },
   {
@@ -57,4 +55,3 @@
     ]
   }
 ]
-
