@@ -1,18 +1,151 @@
 ---
-title: "How I built a Pi WIDS"
+title: "Raspberry Pi Wireless IDS"
 slug: "how-i-built-pi-wids"
-excerpt: "Capturing 802.11 frames on a Raspberry Pi and detecting anomalies."
-date: "2025-05-10"
+excerpt: "A Raspberry Pi–powered Wi-Fi IDS that detects deauth floods and rogue APs using Scapy, FastAPI, and live SSE alerts."
+date: 2025-09-08
 tags: ["security","hardware"]
-cover: "/images/blog/pi-wids/cover.jpg"
 ---
 
-Building a wireless IDS on a Raspberry Pi taught me a lot about Wi‑Fi internals, monitor mode, and practical detection heuristics.
+## Overview
+
+I built a lightweight **Wi-Fi IDS** on a Raspberry Pi that sniffs 802.11 management frames, detects **deauth floods** and **evil twin APs**, and streams live alerts to a web UI. Along the way, I dove deep into monitor mode, Radiotap parsing, and practical detection thresholds.
+
+[Source (GitHub)](https://github.com/mardigiorgio/WiPi-Guardian)
+
+---
+
+## Why a Pi?
+
+- **Always-on sensor**: Silent, low-power, easy to tuck near your AP for best RSSI.  
+- **Dedicated monitor adapter**: No interference with normal connectivity.  
+- **Headless services**: Sniffer + detectors run as system services; UI available remotely.
+
+---
+
+## Monitor Mode Commands
+
+### Modern `ip`/`iw`
 
 ```bash
-sudo ifconfig wlan1 down
+sudo ip link set wlan1 down
+sudo iw dev wlan1 set type monitor
+sudo ip link set wlan1 up
+```
+
+### With `airmon-ng`
+
+```bash
+sudo airmon-ng check kill
 sudo airmon-ng start wlan1
 ```
 
-I used Python for parsing via PyShark and a tiny Flask app for a live alert stream.
+Verify:
 
+```bash
+iw dev
+```
+
+⚠️ Use a **second adapter** (`wlan1`) for monitor mode and keep `wlan0` for internet.
+
+---
+
+## Architecture
+
+- **Capture**: Scapy parses management frames (beacons, deauth, disassoc), extracts SSID, channel, RSSI, RSN bits. Batched writes → SQLite.  
+- **Database**: Indexed tables for events + alerts.  
+- **Detectors**: Read DB, apply heuristics, insert alerts. Optional Discord/email notifications.  
+- **API + UI**: FastAPI + SSE (`/api/stream`) + minimal Svelte frontend.  
+
+---
+
+## Detection Heuristics
+
+### Deauth Floods
+- Sliding window counter for `mgmt.deauth`.  
+- Flags when per-source or global limits exceeded.  
+- Configurable thresholds: `window`, `per_source`, `global`, `cooldown`.  
+
+### Rogue AP (Evil Twin)
+- Defends a configured SSID.  
+- Flags when SSID appears:
+  - On unknown BSSID (if allowlist defined)  
+  - On unapproved channel/band  
+  - With RSN AKM/cipher mismatch  
+
+---
+
+## Configuration
+
+`configs/wids.yaml`:
+
+```yaml
+database:
+  path: wids.sqlite
+api:
+  api_key: "supersecret"
+capture:
+  iface: wlan1mon
+defense:
+  ssid: "MyNetwork"
+  allowed_bssids: ["AA:BB:CC:DD:EE:FF"]
+  allowed_channels: [1,6,11]
+  allowed_bands: ["2.4","5"]
+```
+
+---
+
+## Running
+
+Dev mode (spawns everything):
+
+```bash
+python -m wids dev --config configs/wids.yaml
+```
+
+Run individually:
+
+```bash
+# API (no root)
+python -m wids api --config configs/wids.yaml
+
+# Sensor (no root)
+python -m wids sensor --config configs/wids.yaml
+
+# Sniffer (root)
+sudo python -m wids sniffer --config configs/wids.yaml
+```
+
+---
+
+## API & UI
+
+- **SSE stream**: `GET /api/stream`  
+- **Alerts**: `GET /api/alerts?limit=100`  
+- **SSIDs**: `GET /api/ssids`  
+- **Defense config**: `GET|POST /api/defense`  
+
+UI auto-served if built; otherwise consume JSON/SSE directly.
+
+---
+
+## Lessons Learned
+
+- **Network managers interfere** → kill or disable them.  
+- **Channel info gaps** → fall back to Radiotap, not always consistent.  
+- **Coverage trade-offs** → channel hopping misses bursts; start pinned to AP.  
+- **USB stability** → some adapters need powered hubs.  
+
+---
+
+## Future Work
+
+- Smarter channel hopping.  
+- Richer heuristics (PMKID/RSN anomalies, probe profiling).  
+- Centralized aggregation from multiple Pis.  
+- Web UI improvements: alert acknowledgement, per-rule tuning.  
+
+---
+
+## Safety Note
+
+📡 **Only monitor networks you own or have explicit permission to analyze.** Laws vary.
