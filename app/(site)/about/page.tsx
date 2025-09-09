@@ -1,11 +1,7 @@
 import Section from '@/components/Section'
 import { withBasePath } from '@/lib/basePath'
-import skills from '@/data/skills.json'
-import SkillsGrid from '@/components/SkillsGrid'
 
-type SkillLevel = 'Proficient' | 'Experienced' | 'Familiar'
-type SkillItem = { name: string; level: SkillLevel }
-type SkillGroup = { category: string; items: SkillItem[] }
+// moved skills content to a dedicated /skills page
 
 export const metadata = {
   title: 'Marco DiGiorgio — About',
@@ -25,10 +21,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      <div className="mt-10">
-        <h2 className="text-xl font-semibold">Skills</h2>
-        <SkillsGrid groups={skills as SkillGroup[]} />
-      </div>
+      {/* Skills section moved to /skills */}
     </Section>
   )
 }

@@ -23,6 +23,8 @@ export default function HomePage() {
             </div>
             <div className="flex gap-3 md:justify-center">
               <a href="#projects"><Button>View Projects</Button></a>
+              <Link href="/about"><Button variant="outline">About</Button></Link>
+              <Link href="/skills"><Button variant="outline">Skills</Button></Link>
               <Link href="/contact"><Button variant="outline">Contact</Button></Link>
             </div>
             <div className="flex flex-wrap gap-2 mt-2 text-sm md:justify-center">
@@ -36,7 +38,7 @@ export default function HomePage() {
       </Section>
 
       <Section>
-        <h2 id="projects" className="text-xl font-semibold tracking-tight mb-4">Featured Projects</h2>
+        <h2 id="projects" className="text-xl font-semibold tracking-tight mb-4 text-center">Featured Projects</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((p) => (
             <ProjectCard key={p.slug} title={p.title} summary={p.summary} tech={p.tech} slug={p.slug} cover={p.cover} />
@@ -45,7 +47,7 @@ export default function HomePage() {
       </Section>
 
         <Section>
-          <h2 className="text-xl font-semibold tracking-tight mb-4">Latest Posts</h2>
+          <h2 className="text-xl font-semibold tracking-tight mb-4 text-center">Latest Posts</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {posts.map((post) => (
               <PostCard key={post.slug} title={post.title} excerpt={post.excerpt} slug={post.slug} date={post.date} readingTime={(post as any).readingTime} />

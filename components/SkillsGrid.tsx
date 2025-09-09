@@ -36,7 +36,7 @@ export default function SkillsGrid({ groups }: Props) {
 
   return (
     <div className="mt-4">
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center justify-center gap-2">
         {LEVELS.map((lvl) => {
           const selected = active === lvl
           const count = (counts as any)[lvl]
