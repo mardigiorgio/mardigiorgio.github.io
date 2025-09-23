@@ -1,20 +1,39 @@
 [
   {
-    "category": "Programming & Systems",
+    "category": "Modeling & Scientific Computing",
     "items": [
       { "name": "Python", "level": "Proficient" },
-      { "name": "Bash", "level": "Experienced" },
-      { "name": "C++", "level": "Familiar" },
-      { "name": "C", "level": "Familiar" },
-      { "name": "Java", "level": "Familiar" },
+      { "name": "Data Structures", "level": "Experienced" },
       { "name": "SQL", "level": "Familiar" },
-      { "name": "Assembly", "level": "Familiar" },
+      { "name": "Analytical Skills", "level": "Experienced" }
+    ]
+  },
+  {
+    "category": "Embedded & Control Systems",
+    "items": [
+      { "name": "Embedded Systems", "level": "Familiar" },
+      { "name": "Control Systems Design", "level": "Familiar" },
+      { "name": "PID Control", "level": "Familiar" },
+      { "name": "C", "level": "Familiar" },
+      { "name": "C++", "level": "Familiar" },
+      { "name": "Assembly", "level": "Familiar" }
+    ]
+  },
+  {
+    "category": "Systems Software & Tooling",
+    "items": [
       { "name": "Linux", "level": "Proficient" },
+      { "name": "Bash", "level": "Experienced" },
+      { "name": "Java", "level": "Familiar" },
+      { "name": "Databases", "level": "Familiar" },
+      { "name": "Compiler Construction", "level": "Familiar" },
+      { "name": "Parsing", "level": "Familiar" },
+      { "name": "Test-Driven Development", "level": "Familiar" },
       { "name": "Windows", "level": "Familiar" }
     ]
   },
   {
-    "category": "Security & Networking",
+    "category": "Security & Networking Foundations",
     "items": [
       { "name": "Wireshark", "level": "Familiar" },
       { "name": "Nmap", "level": "Familiar" },
@@ -23,25 +42,11 @@
     ]
   },
   {
-    "category": "Software & Systems Engineering",
-    "items": [
-      { "name": "Data Structures", "level": "Experienced" },
-      { "name": "Databases", "level": "Familiar" },
-      { "name": "Compiler Construction", "level": "Familiar" },
-      { "name": "Parsing", "level": "Familiar" },
-      { "name": "Test-Driven Development", "level": "Familiar" },
-      { "name": "Embedded Systems", "level": "Familiar" },
-      { "name": "Control Systems Design", "level": "Familiar" },
-      { "name": "PID Control", "level": "Familiar" }
-    ]
-  },
-  {
-    "category": "Collaboration & Soft Skills",
+    "category": "Collaboration & Research Practice",
     "items": [
       { "name": "Communication", "level": "Experienced" },
       { "name": "Teamwork", "level": "Experienced" },
-      { "name": "Leadership", "level": "Experienced" },
-      { "name": "Analytical Skills", "level": "Experienced" }
+      { "name": "Leadership", "level": "Experienced" }
     ]
   }
 ]

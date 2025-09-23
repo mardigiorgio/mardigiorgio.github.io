@@ -1,17 +1,17 @@
 ---
 title: "hsuScript Compiler"
 slug: "hsuscript"
-summary: "Educational C compiler demonstrating the full pipeline from lexing and parsing to runtime execution."
-tech: ["C", "Bash"]
+summary: "Small teaching compiler that walks from tokens to x86-64 with a bundled runtime."
+tech: ["C", "Bash", "GCC"]
 year: 2025
 tags: ["compiler","education","systems"]
 repo: "https://github.com/mardigiorgio/hsuScript"
 cover: "/images/projects/hsuscript/cover.jpg"
 ---
 
-## Goals
+## Why I Built It
 
-I built hsc to learn parsing, IR design, and register allocation. The compiler reads .hsc source, tokenizes it, builds an abstract syntax tree, performs semantic checks, lowers to a small SSA-like IR, allocates registers, and finally emits x86‑64 and links a tiny runtime that supplies write and exit.
+hsuScript started as my way to demystify "real" compiler pipelines by implementing every major stage by hand in portable C. I wanted a project small enough to read in a weekend but complete enough to show how lexing, parsing, analysis, and code generation cooperate to turn source text into a native binary.
 
 ```c
 fn main() {
@@ -19,36 +19,45 @@ fn main() {
 }
 ```
 
-### Highlights
+## Pipeline
 
-- Pratt parser with line/column‑aware lexer
-- Semantic pass enforcing variable declarations and types
-- SSA-style IR plus naive register allocator and peephole optimizations
-- Assembler backend that writes ELF binaries and optional assembly dumps
-- Portable C runtime and comprehensive shell-based tests
+### Lexing & Parsing
 
-### Language Features
+- `lexer.c` tokenizes `.hsc` programs, tagging identifiers, numbers, strings, keywords, and operators while preserving line information for diagnostics.
+- `parser.c` is a Pratt parser that builds an `NK_Program` AST, with helpers for loops, conditionals, and function declarations.
 
-- Variables declared with let
-- Arithmetic and boolean expressions
-- String literals
-- if/elif/else conditionals
-- for and while loops
-- User-defined functions
-- write(expr) for output, exit(code) to terminate
+### Semantic Analysis
 
-### Project Structure
+- `sem.c` walks the tree with scoped symbol tables, enforces `let` declarations, and annotates each node with one of the core types: `int`, `bool`, `string`, or `void`.
+- The checker also validates function signatures and ensures control-flow constructs type-check before codegen runs.
 
-- lexer.c – tokenizes source code
-- parser.c – builds the AST
-- sem.c – semantic analysis
-- codegen.c – emits machine code and links runtime
-- runtime/ – minimal standard library
-- tests/ – parser and execution fixtures
-- tools/ – build and test scripts
+### Code Generation
 
-### Getting Started
+- `codegen.c` emits AT&T flavoured x86-64 assembly directly from the typed AST. It manages a manual stack frame, keeps locals in a scope-indexed symbol table, and auto-aligns `%rsp` before every call (`emit_call` handles the ABI bookkeeping).
+- String literals are interned once and spilled into a `.rodata` section; runtime helpers like `hsu_concat` handle heap strings at execution time.
 
-- ./tools/build.sh – build the compiler
-- ./build/hsc path/to/file.hsc – run a script directly
-- ./build/hsc path/to/file.hsc --compile program – compile a script to a native binary
+### Runtime & CLI
+
+- `runtime/rt.c` exports `hsu_print_cstr`, `hsu_print_int`, and `hsu_concat`, which the generated assembly calls through the System V ABI.
+- `main.c` wires the stages together and exposes CLI switches: `--ast-only` (print the AST), `--emit-asm [path]`, `--compile [output]`, and `--dump-rt [path]` for unpacking the embedded runtime object.
+- The default mode writes assembly, assembles and links it with the runtime blob, and then executes the resulting binary so you get immediate feedback.
+
+## Language Surface
+
+- `let` bindings, shadowing, and nested lexical scopes
+- Arithmetic, comparison, logical operators, and unary negation
+- Strings with runtime concatenation and printing
+- `if`/`elif`/`else`, `for`, and `while`
+- Top-level `fn` declarations with return types
+- `write(expr)` for stdout and `exit(code)` to terminate with a status
+
+## Tooling & Tests
+
+- `tools/build.sh` builds `build/hsc`, embeds the runtime object with `objcopy`, and links everything into a single executable.
+- Parser fixtures under `tests/cases` compare expected AST dumps against actual output, catching regressions in syntactic handling.
+- End-to-end samples in `tests/exec` compile, link, and run `.hsc` programs, verifying both stdout and exit codes via `tools/runexec.sh`.
+- A top-level `tools/run_all_tests.sh` script stitches the suites together so one command exercises the entire pipeline.
+
+## What I Took Away
+
+Manually managing ABI details, stack alignment, and even simple string interning gave me a concrete feel for what full-size compilers hide behind abstractions. hsuScript is now my go-to reference when explaining how source code becomes a runnable binary without relying on existing toolchains to do the hard parts.

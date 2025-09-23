@@ -19,8 +19,7 @@ export default function SkillsPage() {
       <h1 className="text-2xl font-semibold tracking-tight text-center">Skills</h1>
 
       <p className="mt-3 text-neutral-700 dark:text-neutral-300 opacity-90 max-w-2xl mx-auto text-center">
-        A practical mix of systems, security, and backend foundations. Use the
-        filters to explore by proficiency and see where I’m strongest.
+        Disciplines and tooling I lean on to design, simulate, and validate intelligent systems. Use the filters to explore strengths across modeling, control, and the software that supports them.
       </p>
 
       <div className="mt-8">
@@ -31,19 +30,19 @@ export default function SkillsPage() {
         <div className="card-base p-5">
           <div className="text-sm font-semibold mb-1">Focus Areas</div>
           <p className="text-sm opacity-80">
-            Secure, reliable software with an interest in low-level systems and backend architecture.
+            Intelligent control systems, embedded experimentation, and the infrastructure that keeps data and decisions coherent.
           </p>
         </div>
         <div className="card-base p-5">
           <div className="text-sm font-semibold mb-1">How I Work</div>
           <p className="text-sm opacity-80">
-            Pragmatic, test-minded, and curious. I value clarity, maintainability, and performance.
+            Hypothesis-driven builds: model the behavior, instrument the system, then iterate with tight feedback loops and clear documentation.
           </p>
         </div>
         <div className="card-base p-5">
           <div className="text-sm font-semibold mb-1">Always Learning</div>
           <p className="text-sm opacity-80">
-            I regularly explore new tooling and techniques to deepen fundamentals and broaden perspective.
+            Currently digging deeper into estimation theory, perception pipelines, and scientific computing workflows.
           </p>
         </div>
       </div>

@@ -7,7 +7,7 @@ export default function BlogPage() {
   return (
     <Section>
       <h1 className="text-2xl font-semibold tracking-tight text-center">Blog</h1>
-      <p className="opacity-80 mt-2 text-center">Notes on security, systems, and the web.</p>
+      <p className="opacity-80 mt-2 text-center">Field notes on intelligent systems, control experiments, and the tooling that supports them.</p>
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
         {posts.map((p) => (
           <PostCard key={p.slug} title={p.title} excerpt={p.excerpt} slug={p.slug} date={p.date} readingTime={(p as any).readingTime} />

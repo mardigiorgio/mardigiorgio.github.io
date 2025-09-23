@@ -9,16 +9,18 @@ export async function generateStaticParams() {
   return getProjectSlugs().map((slug) => ({ slug }))
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const p = getProjectBySlug(params.slug)
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const p = getProjectBySlug(slug)
   return {
     title: p?.title ?? 'Project',
     description: p?.summary,
   }
 }
 
-export default async function ProjectPage({ params }: { params: { slug: string } }) {
-  const project = getProjectBySlug(params.slug)
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const project = getProjectBySlug(slug)
   if (!project) return null
   const mdx = await renderMDX(project.content)
   return (

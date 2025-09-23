@@ -1,7 +1,7 @@
 ---
 title: "VEX Robotics Control System"
 slug: "vex-v5-control-system"
-summary: "Reusable control framework for VEX V5 robots with PID motion, odometry, and a touchscreen auton selector."
+summary: "Competition-ready VEX V5 control stack with reusable chassis math, odometry, and an on-brain autonomous selector."
 tech: ["C++","VEXcode","PID"]
 year: 2023
 tags: ["robotics","embedded"]
@@ -9,30 +9,28 @@ repo: "https://github.com/mardigiorgio/vex-v5-control-system"
 cover: "/images/projects/vex-v5-control-system/cover.jpg"
 ---
 
-## What it does
+## Why I Built It
 
-Provides a modular drive chassis with PID tuning, field‑centric odometry, and a touchscreen interface to choose autonomous routines before a match.
+Every new V5 robot we fielded needed the same things: predictable motion, odometry-aware demos, and a way for the drive team to swap autonomous routines without reflashing code. I packaged those expectations into a reusable control system so future robots could inherit the same chassis math, PID profiles, and on-brain UX with only a few configuration tweaks.
 
-## Features
+## Motion Stack
 
-- Drive class sets up left/right motor groups, inertial sensor, and optional tracking wheels.
-- Tunable PID loops for distance, turn, heading, and swing motions.
-- Odom module maintains X/Y field coordinates using tracking wheel feedback.
-- Pre‑auton screen lets you tap to cycle between test routines (drive, turn, odometry, full path).
-- Driver control helpers for arcade, tank, and holonomic drive styles.
+- **Drive chassis**: `Drive` wires left/right motor groups, an inertial sensor, and optional tracking wheels. A single constructor sets wheel diameter, gear ratio, gyro scale, and tracking offsets so hardware changes become parameter updates instead of code rewrites.
+- **PID tuning surface**: Separate gains for drive, turn, heading hold, and swing maneuvers (`set_drive_constants`, `set_turn_constants`, etc.) keep closed-loop performance stable as mechanisms get heavier.
+- **Odometry**: The embedded `Odom` module integrates forward + sideways encoder data to maintain X/Y field coordinates, powering functions like `drive_to_point`, `turn_to_point`, and `holonomic_drive_to_point` for future holonomic builds.
 
-```cpp
-Drive chassis(
-    TANK_ONE_ROTATION,
-    motor_group(BLMotor, FLMotor, MLMotor),
-    motor_group(BRMotor, FRMotor, MRMotor),
-    PORT16,  // inertial sensor port
-    3.08,    // wheel diameter (in)
-    2.5,     // external gear ratio
-    360,     // gyro scale
-    PORT1, -PORT2, PORT3, -PORT4,      // drive motor ports (sign sets direction)
-    PORT5, 2.75, 1,                    // forward tracking wheel: port, diameter, offset
-    PORT5, 2.75, 5.2                   // sideways tracking wheel: port, diameter, offset
-);
-```
+## Field Workflow
 
+- **Touchscreen auton selector**: During `pre_auton`, the Brain cycles through labeled routines (drive, turn, odom diagnostics, full skills run). One tap locks in the routine the moment the match starts.
+- **Driver aids**: `control_arcade` handles operator driving while button toggles flip wings and spin the triball slapper at regulated voltages, giving the driver consistent subsystem behavior.
+- **Diagnostics**: Dedicated test modes print live odometry data to the screen or drive scripted motion sequences so we can debug alignment and sensor offsets between matches.
+
+## Engineering Notes
+
+- Default PID constants live in one helper (`default_constants`) so new robots inherit battle-tested tuning before we dial in final gains.
+- Exit conditions on drive/turn maneuvers prevent oscillation and ensure the robot parks gracefully inside competition tolerances.
+- The control stack slots into VEXcode Pro V5 with a one-time port configuration update, keeping the learning curve low for the rest of the drive team.
+
+## Takeaways
+
+Abstracting the chassis and motion primitives into a standalone library meant every robot after this one started with working auton, reliable odometry, and an operator UX teams trusted. Instead of scrambling on practice night, we now spend that time refining game strategy—and the codebase keeps earning its keep season after season.

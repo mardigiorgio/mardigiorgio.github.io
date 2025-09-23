@@ -1,4 +1,5 @@
 import '@/styles/globals.css'
+import 'katex/dist/katex.min.css'
 import { PropsWithChildren } from 'react'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/components/ThemeProvider'

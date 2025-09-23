@@ -1,151 +1,157 @@
 ---
-title: "Raspberry Pi Wireless IDS"
-slug: "how-i-built-pi-wids"
-excerpt: "A Raspberry Pi–powered Wi-Fi IDS that detects deauth floods and rogue APs using Scapy, FastAPI, and live SSE alerts."
+title: "One-Wheel Odometry and PID on VEX V5"
+slug: "vex-v5-odometry-pid-math"
+excerpt: "Deriving the control math that powers my reusable VEX V5 chassis: PID loops, IMU fusion, and single-wheel odometry translated into match-ready code."
 date: 2025-09-08
-tags: ["security","hardware"]
+tags: ["robotics","control","math"]
 ---
 
-## Overview
+## Why dig into the math?
 
-I built a lightweight **Wi-Fi IDS** on a Raspberry Pi that sniffs 802.11 management frames, detects **deauth floods** and **evil twin APs**, and streams live alerts to a web UI. Along the way, I dove deep into monitor mode, Radiotap parsing, and practical detection thresholds.
-
-[Source (GitHub)](https://github.com/mardigiorgio/WiPi-Guardian)
-
----
-
-## Why a Pi?
-
-- **Always-on sensor**: Silent, low-power, easy to tuck near your AP for best RSSI.  
-- **Dedicated monitor adapter**: No interference with normal connectivity.  
-- **Headless services**: Sniffer + detectors run as system services; UI available remotely.
+The VEX control stack in my repos looks like VEXcode boilerplate at first glance, but the chassis only behaves if the motion math behind it is right. This post breaks down the control theory I leaned on when I built a reusable drivetrain library: how each PID loop is shaped, how odometry works when you only have one passive tracking wheel plus an inertial sensor, and how those equations show up in code you can run on the V5 Brain.
 
 ---
 
-## Monitor Mode Commands
+## Hardware model
 
-### Modern `ip`/`iw`
+For the math, assume:
 
-```bash
-sudo ip link set wlan1 down
-sudo iw dev wlan1 set type monitor
-sudo ip link set wlan1 up
+- Tank drivetrain with left and right motor groups.
+- One passive forward tracking wheel with radius `r` tied to a V5 rotation sensor.
+- An IMU supplying yaw, with angle measured in radians.
+- Loop period `T_s` (20 ms in my driver control loop).
+
+The tracking wheel sits on the robot centerline, so it measures fore/aft translation only. Lateral motion relies on the IMU.
+
+---
+
+## PID refresher
+
+Every motion primitive in the library boils down to a proportional-integral-derivative controller. Continuous form:
+
+```math
+u(t) = K_p e(t) + K_i \int_0^t e(\tau) d\tau + K_d \frac{d e(t)}{dt}
 ```
 
-### With `airmon-ng`
+Discrete, inside the V5 event loop:
 
-```bash
-sudo airmon-ng check kill
-sudo airmon-ng start wlan1
+```math
+\begin{aligned}
+ e[k] &= r[k] - y[k] \\
+ I[k] &= \operatorname{clamp}(I[k-1] + e[k] T_s) \\
+ D[k] &= \frac{e[k] - e[k-1]}{T_s} \\
+ u[k] &= K_p e[k] + K_i I[k] + K_d D[k]
+\end{aligned}
 ```
 
-Verify:
+Clamping the integral prevents windup when the chassis saturates the motors. Each motion type has its own gain set:
 
-```bash
-iw dev
+- `drive`: distance error from left/right wheel encoders or odometry.
+- `heading`: error between desired heading and IMU measurement.
+- `turn`: rotates in place with differential voltage.
+- `swing`: locks one side and pivots on the other.
+
+Exit conditions stop a loop when both error and derivative sit inside tolerances for a minimum time, so the robot settles instead of ringing.
+
+---
+
+## Odometry with one wheel + IMU
+
+Let the tracking wheel measure arc length `s` and the IMU measure yaw `theta`. Between loop iterations `k-1` and `k`:
+
+```math
+\Delta s = r \cdot (\phi_k - \phi_{k-1}), \quad \Delta \theta = \theta_k - \theta_{k-1}
 ```
 
-⚠️ Use a **second adapter** (`wlan1`) for monitor mode and keep `wlan0` for internet.
+The incremental body-frame displacement is `v_b = [Δs, 0]^T`. Rotate it into the global frame using the midpoint heading:
 
----
-
-## Architecture
-
-- **Capture**: Scapy parses management frames (beacons, deauth, disassoc), extracts SSID, channel, RSSI, RSN bits. Batched writes → SQLite.  
-- **Database**: Indexed tables for events + alerts.  
-- **Detectors**: Read DB, apply heuristics, insert alerts. Optional Discord/email notifications.  
-- **API + UI**: FastAPI + SSE (`/api/stream`) + minimal Svelte frontend.  
-
----
-
-## Detection Heuristics
-
-### Deauth Floods
-- Sliding window counter for `mgmt.deauth`.  
-- Flags when per-source or global limits exceeded.  
-- Configurable thresholds: `window`, `per_source`, `global`, `cooldown`.  
-
-### Rogue AP (Evil Twin)
-- Defends a configured SSID.  
-- Flags when SSID appears:
-  - On unknown BSSID (if allowlist defined)  
-  - On unapproved channel/band  
-  - With RSN AKM/cipher mismatch  
-
----
-
-## Configuration
-
-`configs/wids.yaml`:
-
-```yaml
-database:
-  path: wids.sqlite
-api:
-  api_key: "supersecret"
-capture:
-  iface: wlan1mon
-defense:
-  ssid: "MyNetwork"
-  allowed_bssids: ["AA:BB:CC:DD:EE:FF"]
-  allowed_channels: [1,6,11]
-  allowed_bands: ["2.4","5"]
+```math
+R(\psi) = \begin{bmatrix}
+\cos \psi & -\sin \psi \\
+\sin \psi & \cos \psi
+\end{bmatrix}, \quad \psi = \theta_{k-1} + \frac{1}{2}\Delta \theta
 ```
 
----
-
-## Running
-
-Dev mode (spawns everything):
-
-```bash
-python -m wids dev --config configs/wids.yaml
+```math
+\mathbf{v}_g = R(\psi) \mathbf{v}_b
 ```
 
-Run individually:
+Pose update:
 
-```bash
-# API (no root)
-python -m wids api --config configs/wids.yaml
-
-# Sensor (no root)
-python -m wids sensor --config configs/wids.yaml
-
-# Sniffer (root)
-sudo python -m wids sniffer --config configs/wids.yaml
+```math
+\begin{aligned}
+ x_k &= x_{k-1} + v_{g,x} \\
+ y_k &= y_{k-1} + v_{g,y} \\
+ \theta_k &= \theta_{k-1} + \Delta \theta
+\end{aligned}
 ```
 
----
-
-## API & UI
-
-- **SSE stream**: `GET /api/stream`  
-- **Alerts**: `GET /api/alerts?limit=100`  
-- **SSIDs**: `GET /api/ssids`  
-- **Defense config**: `GET|POST /api/defense`  
-
-UI auto-served if built; otherwise consume JSON/SSE directly.
+Even with a single wheel, this captures forward motion accurately and lets the IMU absorb drift. Adding lateral wheels later simply gives direct measurement of `Δy`.
 
 ---
 
-## Lessons Learned
+## Drive-to-point control
 
-- **Network managers interfere** → kill or disable them.  
-- **Channel info gaps** → fall back to Radiotap, not always consistent.  
-- **Coverage trade-offs** → channel hopping misses bursts; start pinned to AP.  
-- **USB stability** → some adapters need powered hubs.  
+To drive toward field coordinate `(x_d, y_d)`:
+
+```math
+\begin{aligned}
+ \Delta x &= x_d - x \\
+ \Delta y &= y_d - y \\
+ e_d &= \sqrt{(\Delta x)^2 + (\Delta y)^2} \\
+ \theta_d &= \operatorname{atan2}(\Delta y, \Delta x) \\
+ e_\theta &= \theta_d - \theta
+\end{aligned}
+```
+
+Distance PID produces a forward voltage `u_drive`, heading PID produces a correction `u_turn`:
+
+```math
+\begin{aligned}
+ u_{\text{drive}} &= \text{PID}_d(e_d) \\
+ u_{\text{turn}} &= \text{PID}_\theta(e_\theta) \\
+ V_L &= u_{\text{drive}} - u_{\text{turn}} \\
+ V_R &= u_{\text{drive}} + u_{\text{turn}}
+\end{aligned}
+```
+
+Near the target, I clamp `u_drive` to avoid overshoot and lower heading gains so the robot glides into place.
 
 ---
 
-## Future Work
+## Example implementation sketch
 
-- Smarter channel hopping.  
-- Richer heuristics (PMKID/RSN anomalies, probe profiling).  
-- Centralized aggregation from multiple Pis.  
-- Web UI improvements: alert acknowledgement, per-rule tuning.  
+```cpp
+// inside a timed loop running every Ts seconds
+const double drive_error = target_distance - odom.distance_traveled();
+const double drive_cmd = drive_pid.step(drive_error);
+
+const double heading_error = wrapRadians(target_heading - imu.rotation(rad));
+const double turn_cmd = heading_pid.step(heading_error);
+
+const double left_voltage = drive_cmd - turn_cmd;
+const double right_voltage = drive_cmd + turn_cmd;
+
+chassis.drive_with_voltage(left_voltage, right_voltage);
+```
+
+The helper `wrapRadians` keeps `e_theta` in `[-pi, pi]` to prevent the controller from commanding a 350 degree spin when 10 degrees the other way is faster.
 
 ---
 
-## Safety Note
+## Tuning workflow
 
-📡 **Only monitor networks you own or have explicit permission to analyze.** Laws vary.
+1. Start with `K_d = 0`. Raise `K_p` until the robot reaches the target quickly but overshoots slightly.
+2. Add `K_d` to dampen overshoot. Increase until the oscillation vanishes.
+3. Introduce a small `K_i` if the drivetrain cannot reach the target (static friction), but guard it with integral clamp.
+4. Adjust exit tolerances so the competition robot holds points inside field tolerances without burning match time.
+5. Record loops at match voltage. Drivetrains sag under battery load; retune if the battery pack changes.
+
+---
+
+## Lessons learned
+
+- Math first, configuration second: once the equations were locked in, swapping wheel diameter or tracking offsets was a quick constant edit.
+- IMU fusion cleans up encoder slip, especially when driving over discs or triballs. Reset the gyro any time the robot is lifted.
+- One tracking wheel is enough for simple tank bots. When we tested an X-drive, adding the sideways wheel slotted into the same equations—just another component in `v_b`.
+- Codifying PID profiles in `default_constants()` gave the whole team a safe baseline. From there we tweak by logging error curves during practice runs.

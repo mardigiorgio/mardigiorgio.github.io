@@ -16,9 +16,9 @@ export default function HomePage() {
           <div className="flex flex-col gap-6 md:items-center">
             <div className="md:text-center">
               <h1 className="text-3xl md:text-5xl font-semibold tracking-tight">Marco DiGiorgio</h1>
-              <p className="mt-2 text-lg opacity-80">Software Engineer & Security Tinkerer</p>
+              <p className="mt-2 text-lg opacity-80">Intelligent Systems Engineering student & scientific systems builder</p>
               <p className="mt-3 max-w-2xl opacity-80 md:mx-auto">
-                I enjoy solving complex problems in systems and security.
+                I study how computation, data, and sensing combine to produce resilient intelligent systems—then prototype the tools, controllers, and research experiments that make those ideas tangible.
               </p>
             </div>
             <div className="flex gap-3 md:justify-center">
@@ -28,10 +28,10 @@ export default function HomePage() {
               <Link href="/contact"><Button variant="outline">Contact</Button></Link>
             </div>
             <div className="flex flex-wrap gap-2 mt-2 text-sm md:justify-center">
-              <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Sophomore @ DePaul CS</span>
-              <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Cybersecurity & Systems Programming</span>
-              <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Fav stack: Next.js + TS</span>
-              <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Open to internships</span>
+              <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Intelligent Systems Engineering @ DePaul</span>
+              <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Control, perception & embedded experimentation</span>
+              <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Model-driven systems & scientific tooling</span>
+              <span className="rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 py-1">Open to research + engineering internships</span>
             </div>
           </div>
         </AnimatedFade>

@@ -9,7 +9,7 @@ export default function ProjectsPage() {
     <>
       <Section>
         <h1 className="text-2xl font-semibold tracking-tight text-center">Projects</h1>
-        <p className="opacity-80 mt-2 text-center">Filter by tag to explore my work.</p>
+        <p className="opacity-80 mt-2 text-center">Filter by tag to explore research-driven prototypes, control experiments, and systems builds.</p>
       </Section>
       <ProjectsClient projects={projects} tags={tags} />
     </>

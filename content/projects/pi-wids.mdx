@@ -1,29 +1,37 @@
 ---
-title: "WiPi Guardian"
-slug: "wipi-guardian"
-summary: "Raspberry Pi–focused wireless intrusion detection system with FastAPI backend and Svelte dashboard."
-tech: ["Python","FastAPI","Svelte","Tailwind CSS"]
+title: "PiGuard WIDS"
+slug: "piguard"
+summary: "Raspberry Pi Wi-Fi intrusion detection stack with Scapy capture, FastAPI automation, and a Svelte operations console."
+tech: ["Python","FastAPI","Scapy","Svelte"]
 year: 2025
-tags: ["security","iot"]
-repo: "https://github.com/mardigiorgio/WiPi-Guardian"
+tags: ["security","iot","networking"]
+repo: "https://github.com/mardigiorgio/PiGuard"
 cover: "/images/projects/wipi/cover.jpg"
 ---
 
-## Overview
+## Why PiGuard Exists
 
-WiPi Guardian is an in-progress wireless IDS tailored to Raspberry Pi deployments.
-A Scapy-based sniffer ingests 802.11 beacons, deauthentication, and disassociation frames, normalizes channel/band metadata, and batches them into a SQLite database for later analysis.
-The sensor loop analyzes recent events, flagging deauthentication floods scoped to a defended SSID and issuing rogue‑AP alerts when BSSIDs, channels, bands, or RSN capabilities deviate from policy.
-Alerts can be pushed to Discord or sent via SMTP, enabling remote notification.
-A FastAPI service exposes REST endpoints for health, overview counts, event queries, and policy updates, plus an SSE stream for near real‑time alert delivery and optional static UI hosting.
-The Svelte/Tailwind frontend shows live stats, lets you edit defense rules, and displays incoming alerts through the SSE channel
+I wanted a wireless watchdog that could live on the same shelf as my home router, spot sketchy deauth storms, and still feel like a professional appliance—without paying for one. PiGuard is that weekend project turned open-source home WIDS: it runs on a spare Raspberry Pi, installs in a single command, and gives enthusiasts the observability and controls that consumer gear usually hides.
 
-### Features
+## Detection Pipeline
 
-- Scapy-based 802.11 frame capture with channel/band inference and RSN parsing
-- Scoped deauthentication flood detection with cooldown and offender tracking
-- Rogue‑AP detection using BSSID/channel/band allowlists and RSN baselines
-- Discord webhook and SMTP email alerting modules
-- FastAPI backend with REST + SSE and optional static dashboard hosting
-- Svelte/Tailwind UI for overview metrics, defense configuration, and live alert stream
+- **Sniffer**: A Scapy capture loop pinned to monitor mode radios, running with libpcap filters so it only ingests beacon, deauth, and disassoc frames. Each packet is normalized with channel/band inference, RSSI, and optional RSN parsing before being buffered into SQLite for low-power durability.
+- **Sensor**: A stateful analyzer that sweeps recent events every few seconds. It looks for scoped deauth floods (per source and global thresholds), SSID spoofing, BSSID/channel drift, RSN capability mismatches, and even band-power variance anomalies to catch mobile rogue APs.
+- **Alerts**: Findings are persisted as first-class alerts, surfaced instantly over Server-Sent Events, and optionally pushed to Discord webhooks or SMTP for the on-call channel.
 
+## Operations Surface
+
+- **FastAPI control plane**: JSON endpoints to manage capture settings, defense policy, thresholds, and device interfaces. Everything is gated by API keys so you can script automations, Home Assistant hooks, or quick CLI tweaks without exposing the dashboard.
+- **Svelte dashboard**: A responsive console that ships with the Pi, providing Overview, Alerts, Defense, Device, Settings, and Logs tabs. It can restart systemd services, hot swap channel hopping modes, and live-edit alert thresholds without touching the terminal.
+- **Installer**: `install.sh` checks device prerequisites, builds the UI, provisions a Python venv, installs systemd units (`piguard-api`, `piguard-sniffer`, `piguard-sensor`), and walks the operator through SSID defense setup. Getting a fresh SD card online takes minutes instead of hours.
+
+## Hard-Won Engineering Bits
+
+- Tuned capture stack: BPF filters, SQLite WAL + PRAGMA tuning, and batched inserts keep packet loss near zero even on Pi 3 hardware.
+- Live configuration reloads: the sniffer and sensor processes watch `/etc/piguard/wids.yaml`, so UI edits propagate to long-running services without restarts.
+- Automation-friendly design: every UI action is backed by REST endpoints; CLI helpers (`python -m wids sensor`, `python -m wids sniffer`, etc.) make it trivial to integrate with existing ops scripts.
+- Misuse-resistant defaults: alert cooldowns, offender tracking, and power variance heuristics reduce false positives when the network is noisy.
+
+## What I Learned
+
+Building PiGuard forced me to blend low-level 802.11 capture work with home-lab pragmatism. I now have a playbook for taking raw packet telemetry, hardening it for constrained hardware, and wrapping it in an operator experience that hobbyists actually reach for. The result is a deploy-anywhere WIDS that makes a Raspberry Pi feel like a purpose-built security appliance.
