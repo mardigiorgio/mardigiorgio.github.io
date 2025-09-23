@@ -1,11 +1,10 @@
 import { ImageResponse } from 'next/og'
 
-export const runtime = 'edge'
+export const dynamic = 'force-static'
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url)
-  const title = searchParams.get('title') || 'Marco DiGiorgio'
-  const tagline = searchParams.get('tagline') || 'Intelligent Systems Engineering student building scientific systems'
+export async function GET() {
+  const title = 'Marco DiGiorgio'
+  const tagline = 'Intelligent Systems Engineering student building scientific systems'
 
   return new ImageResponse(
     (

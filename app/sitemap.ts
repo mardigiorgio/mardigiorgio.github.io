@@ -9,3 +9,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getPostSlugs().map((s) => `/blog/${s}`)
   return [...routes, ...proj, ...posts].map((route) => ({ url: `${base}${route}` }))
 }
+
+export const dynamic = 'force-static'

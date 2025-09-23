@@ -8,7 +8,7 @@ const nextConfig = {
   assetPrefix: basePath || undefined,
   trailingSlash: true,
   images: { unoptimized: true },
-  experimental: { typedRoutes: true },
+  typedRoutes: true,
 }
 
 export default nextConfig
