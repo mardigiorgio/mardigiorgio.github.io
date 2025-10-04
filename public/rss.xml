@@ -2,20 +2,20 @@
 <rss version="2.0">
   <channel>
     <title><![CDATA[Marco DiGiorgio]]></title>
-    <link>https://mardigiorgio.github.io/portfolio-site</link>
+    <link>https://mardigiorgio.github.io</link>
     <description><![CDATA[Intelligent Systems Engineering student building scientific systems, smart controllers, and experimental tooling.]]></description>
   <item>
     <title><![CDATA[My path to Security+]]></title>
-    <link>https://mardigiorgio.github.io/portfolio-site/blog/my-path-to-security-plus</link>
-    <guid>https://mardigiorgio.github.io/portfolio-site/blog/my-path-to-security-plus</guid>
+    <link>https://mardigiorgio.github.io/blog/my-path-to-security-plus</link>
+    <guid>https://mardigiorgio.github.io/blog/my-path-to-security-plus</guid>
     <pubDate>Mon, 15 Sep 2025 00:00:00 GMT</pubDate>
     <description><![CDATA[Notes and resources I used to prepare for CompTIA Security+.]]></description>
   </item>
 
   <item>
     <title><![CDATA[One-Wheel Odometry and PID on VEX V5]]></title>
-    <link>https://mardigiorgio.github.io/portfolio-site/blog/vex-v5-odometry-pid-math</link>
-    <guid>https://mardigiorgio.github.io/portfolio-site/blog/vex-v5-odometry-pid-math</guid>
+    <link>https://mardigiorgio.github.io/blog/vex-v5-odometry-pid-math</link>
+    <guid>https://mardigiorgio.github.io/blog/vex-v5-odometry-pid-math</guid>
     <pubDate>Mon, 08 Sep 2025 00:00:00 GMT</pubDate>
     <description><![CDATA[Deriving the control math that powers my reusable VEX V5 chassis: PID loops, IMU fusion, and single-wheel odometry translated into match-ready code.]]></description>
   </item>
