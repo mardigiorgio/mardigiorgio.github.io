@@ -29,21 +29,9 @@ export default function HelloIntro() {
   useEffect(() => {
     try {
       const drawn = typeof window !== "undefined" && sessionStorage.getItem(storageKey)
-      // Determine base path similar to pre-paint logic (env then baseURI-derived)
-      const envBase = (process.env.NEXT_PUBLIC_BASE_PATH || "") as string
-      const fallbackBase = () => {
-        try {
-          const u = new URL(document.baseURI)
-          const parts = u.pathname.split("/").filter(Boolean)
-          return parts.length > 0 ? `/${parts[0]}` : ""
-        } catch {
-          return ""
-        }
-      }
-      let base = envBase || fallbackBase() || ""
-      if (base !== "") base = base.replace(/\/$/, "")
       const path = window.location.pathname || "/"
-      const isHome = base === "" ? path === "/" || path === "" : path === base || path === base + "/"
+      // Check if we're on the home page (root or index.html)
+      const isHome = path === "/" || path === "" || path === "/index.html"
 
       if (drawn || !isHome) {
         setShouldShow(false)
