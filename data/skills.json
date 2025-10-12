@@ -1,52 +1,44 @@
 [
   {
-    "category": "Modeling & Scientific Computing",
+    "category": "Web Development & Frameworks",
     "items": [
-      { "name": "Python", "level": "Proficient" },
-      { "name": "Data Structures", "level": "Experienced" },
-      { "name": "SQL", "level": "Familiar" },
-      { "name": "Analytical Skills", "level": "Experienced" }
+      { "name": "React", "level": "Proficient" },
+      { "name": "Next.js", "level": "Proficient" },
+      { "name": "TypeScript", "level": "Proficient" },
+      { "name": "Svelte", "level": "Experienced" },
+      { "name": "Tailwind CSS", "level": "Experienced" },
+      { "name": "FastAPI", "level": "Experienced" },
+      { "name": "REST APIs", "level": "Experienced" }
     ]
   },
   {
     "category": "Embedded & Control Systems",
     "items": [
-      { "name": "Embedded Systems", "level": "Familiar" },
-      { "name": "Control Systems Design", "level": "Familiar" },
-      { "name": "PID Control", "level": "Familiar" },
-      { "name": "C", "level": "Familiar" },
-      { "name": "C++", "level": "Familiar" },
-      { "name": "Assembly", "level": "Familiar" }
+      { "name": "C++", "level": "Proficient" },
+      { "name": "Embedded Systems", "level": "Experienced" },
+      { "name": "Control Systems Design", "level": "Experienced" },
+      { "name": "PID Control", "level": "Experienced" },
+      { "name": "C", "level": "Experienced" }
+    ]
+  },
+  {
+    "category": "Programming & Computer Science",
+    "items": [
+      { "name": "Python", "level": "Proficient" },
+      { "name": "Data Structures", "level": "Experienced" },
+      { "name": "Compiler Construction", "level": "Experienced" },
+      { "name": "Assembly Language", "level": "Familiar" },
+      { "name": "Java", "level": "Familiar" }
     ]
   },
   {
     "category": "Systems Software & Tooling",
     "items": [
       { "name": "Linux", "level": "Proficient" },
+      { "name": "Git", "level": "Proficient" },
       { "name": "Bash", "level": "Experienced" },
-      { "name": "Java", "level": "Familiar" },
-      { "name": "Databases", "level": "Familiar" },
-      { "name": "Compiler Construction", "level": "Familiar" },
-      { "name": "Parsing", "level": "Familiar" },
-      { "name": "Test-Driven Development", "level": "Familiar" },
-      { "name": "Windows", "level": "Familiar" }
-    ]
-  },
-  {
-    "category": "Security & Networking Foundations",
-    "items": [
-      { "name": "Wireshark", "level": "Familiar" },
-      { "name": "Nmap", "level": "Familiar" },
-      { "name": "Metasploit", "level": "Familiar" },
-      { "name": "Splunk", "level": "Familiar" }
-    ]
-  },
-  {
-    "category": "Collaboration & Research Practice",
-    "items": [
-      { "name": "Communication", "level": "Experienced" },
-      { "name": "Teamwork", "level": "Experienced" },
-      { "name": "Leadership", "level": "Experienced" }
+      { "name": "SQL/Databases", "level": "Experienced" },
+      { "name": "Test-Driven Development", "level": "Experienced" }
     ]
   }
 ]

@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="space-x-4">
           <Link href={'/rss.xml' as Route} className="hover:underline">RSS</Link>
           <a
-            href="https://github.com/mardigiorgio/portfolio-site"
+            href="https://github.com/mardigiorgio/mardigiorgio.github.io"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:underline"
