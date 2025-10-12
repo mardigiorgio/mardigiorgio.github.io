@@ -1,5 +1,15 @@
 [
   {
+    "category": "Embedded & Control Systems",
+    "items": [
+      { "name": "C++", "level": "Proficient" },
+      { "name": "Embedded Systems", "level": "Experienced" },
+      { "name": "Control Systems Design", "level": "Experienced" },
+      { "name": "PID Control", "level": "Experienced" },
+      { "name": "C", "level": "Experienced" }
+    ]
+  },
+  {
     "category": "Web Development & Frameworks",
     "items": [
       { "name": "React", "level": "Proficient" },
@@ -9,16 +19,6 @@
       { "name": "Tailwind CSS", "level": "Experienced" },
       { "name": "FastAPI", "level": "Experienced" },
       { "name": "REST APIs", "level": "Experienced" }
-    ]
-  },
-  {
-    "category": "Embedded & Control Systems",
-    "items": [
-      { "name": "C++", "level": "Proficient" },
-      { "name": "Embedded Systems", "level": "Experienced" },
-      { "name": "Control Systems Design", "level": "Experienced" },
-      { "name": "PID Control", "level": "Experienced" },
-      { "name": "C", "level": "Experienced" }
     ]
   },
   {
