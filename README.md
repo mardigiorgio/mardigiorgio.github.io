@@ -19,3 +19,7 @@ A clean, fast personal portfolio focused on showcasing projects, writing, and sk
 ## Links
 - Site code: this repository
 - GitHub profile: https://github.com/mardigiorgio
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
