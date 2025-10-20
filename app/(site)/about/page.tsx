@@ -19,12 +19,12 @@ export default function AboutPage() {
           className="rounded-2xl w-48 h-48 object-cover mx-auto md:mx-0 md:float-left md:mr-6 md:mb-4"
         />
         <div className="space-y-4 opacity-90">
-          <p>Hi, I’m Marco — an Intelligent Systems Engineering major at DePaul who studies how sensing, computation, and actuators cooperate to build responsive systems.</p>
-          <p>My favorite work lives where prototypes feel like lab experiments. I map out the physics, wire up instrumentation, then iterate on control logic and software until the system behaves the way the model predicted. That mix of theory, data, and hands-on debugging is what keeps me up refining experiments long after midnight.</p>
+          <p>Hi, I'm Marco — an Intelligent Systems Engineering major at DePaul. I'm interested in robotics, control systems, and building things that combine hardware and software.</p>
+          <p>I enjoy projects that feel like experiments. I'll sketch out how something should work, build a prototype, then spend time debugging and tuning until it behaves the way I expected. The hands-on process of going from theory to working system is what I find most satisfying.</p>
           <p>I got hooked early. At seven I was remixing Scratch projects; by nine I was convincing my mom to send me to a camp so I could mod Minecraft. Those early projects led me from scripting to low-level systems, then into the worlds of embedded design, signal processing, and intelligent automation.</p>
-          <p>Today I’m fascinated by control systems, autonomy, and the computational tools that help engineers reason about complex environments. Whether I’m building a feedback loop, tuning a perception pipeline, or designing software for hardware with tight constraints, I love translating scientific models into something you can watch, measure, and improve.</p>
-          <p>Outside of the lab, I sharpen my pattern recognition by playing chess and competitive FPS titles like TF2. The strategic thinking, situational awareness, and constant iteration echo the mental loops I rely on when engineering resilient systems.</p>
-          <p>I’m looking for opportunities that blend research, intelligent systems, and rigorous engineering — the kind of teams where building smarter infrastructure or robots means running experiments, interrogating data, and shipping reliable tools.</p>
+          <p>Right now I'm focused on control systems, autonomy, and the tools that help engineers build and test complex systems. Whether I'm writing a control loop, setting up sensors, or working with embedded hardware, I like seeing ideas turn into something real that you can measure and improve.</p>
+          <p>Outside of classes and projects, I play chess and competitive FPS games like TF2. They're fun ways to unwind, and the strategic thinking definitely carries over to how I approach engineering problems.</p>
+          <p>I'm looking for internships in robotics, intelligent systems, or engineering roles where I can work on real hardware, run experiments, and build reliable tools.</p>
         </div>
       </div>
 
