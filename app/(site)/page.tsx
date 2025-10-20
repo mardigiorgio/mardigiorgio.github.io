@@ -18,7 +18,7 @@ export default function HomePage() {
               <h1 className="text-3xl md:text-5xl font-semibold tracking-tight">Marco DiGiorgio</h1>
               <p className="mt-2 text-lg opacity-80">Intelligent Systems Engineering student at DePaul</p>
               <p className="mt-3 max-w-2xl opacity-80 md:mx-auto">
-                I'm interested in how sensors, code, and hardware work together to build intelligent systems. I like to prototype things, run experiments, and iterate until they actually work.
+                I&apos;m interested in how sensors, code, and hardware work together to build intelligent systems. I like to prototype things, run experiments, and iterate until they actually work.
               </p>
             </div>
             <div className="flex gap-3 md:justify-center">
