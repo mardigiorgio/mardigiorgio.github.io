@@ -6,10 +6,7 @@ import socials from '@/data/socials.json'
 const nav: { href: Route; label: string }[] = [
   { href: '/', label: 'Home' },
   { href: '/projects', label: 'Projects' },
-  { href: '/skills', label: 'Skills' },
-  { href: '/about', label: 'About' },
   { href: '/blog', label: 'Blog' },
-  { href: '/contact', label: 'Contact' },
 ]
 
 export default function Navbar() {

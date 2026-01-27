@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --radius: 1rem;
+  --radius: 0;
   /* Hello Intro theme tokens (tune colors + sizes) */
   --hello-neon-start: #000000; /* black neon for light mode */
   --hello-neon-end: #000000;
@@ -32,7 +32,7 @@ body {
 }
 
 .card-base {
-  @apply rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-soft bg-white dark:bg-neutral-900;
+  @apply rounded-none border border-neutral-200 dark:border-neutral-800 shadow-soft bg-white dark:bg-neutral-900;
 }
 
 .hover-lift {

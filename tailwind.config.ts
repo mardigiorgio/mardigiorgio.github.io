@@ -20,8 +20,8 @@ const config: Config = {
         },
       },
       borderRadius: {
-        xl: '1rem',
-        '2xl': '1.25rem'
+        xl: '0',
+        '2xl': '0'
       },
       boxShadow: {
         soft: '0 6px 24px rgba(0,0,0,0.06)'

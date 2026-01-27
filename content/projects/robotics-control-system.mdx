@@ -9,9 +9,9 @@ repo: "https://github.com/mardigiorgio/vex-v5-control-system"
 cover: "/images/projects/vex-v5-control-system/cover.jpg"
 ---
 
-## Why I Built It
+## Overview
 
-Every new V5 robot we fielded needed the same things: predictable motion, odometry-aware demos, and a way for the drive team to swap autonomous routines without reflashing code. I packaged those expectations into a reusable control system so future robots could inherit the same chassis math, PID profiles, and on-brain UX with only a few configuration tweaks.
+A reusable control library for VEX V5 robots that provides chassis control, odometry, PID tuning, and an autonomous routine selector. The library abstracts motion primitives so robot configurations can be updated through parameters rather than code changes.
 
 ## Motion Stack
 
@@ -31,6 +31,6 @@ Every new V5 robot we fielded needed the same things: predictable motion, odomet
 - Exit conditions on drive/turn maneuvers prevent oscillation and ensure the robot parks gracefully inside competition tolerances.
 - The control stack slots into VEXcode Pro V5 with a one-time port configuration update, keeping the learning curve low for the rest of the drive team.
 
-## Takeaways
+## What I Learned
 
-Abstracting the chassis and motion primitives into a standalone library meant every robot after this one started with working auton, reliable odometry, and an operator UX teams trusted. Instead of scrambling on practice night, we now spend that time refining game strategy—and the codebase keeps earning its keep season after season.
+Building a reusable control library clarified how to structure embedded software for hardware portability. Separating motion control from robot-specific logic made it easier to iterate on mechanical designs without rewriting control code.

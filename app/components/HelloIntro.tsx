@@ -175,7 +175,7 @@ export default function HelloIntro() {
           position: absolute;
           width: 6px;
           height: 6px;
-          border-radius: 9999px;
+          border-radius: 0;
           background: radial-gradient(circle at 30% 30%, var(--hello-neon-end), rgba(255,255,255,0) 70%);
           opacity: 0.9;
           transform: translate3d(0,0,0) scale(1);

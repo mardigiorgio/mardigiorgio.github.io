@@ -29,11 +29,6 @@ export default function ProjectCard({ title, summary, tech, slug, cover }: Props
         </CardHeader>
         <CardContent>
           <p className="text-sm opacity-80 line-clamp-2">{summary}</p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {tech.slice(0, 4).map((t) => (
-              <Badge key={t} className="text-xs">{t}</Badge>
-            ))}
-          </div>
         </CardContent>
       </Card>
     </Link>

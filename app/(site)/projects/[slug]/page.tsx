@@ -48,11 +48,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         ) : null}
       </div>
       <p className="opacity-80 mt-2">{project.summary}</p>
-      <div className="mt-4 flex flex-wrap gap-2 text-sm opacity-70">
-        {project.tech.map((t) => (
-          <span key={t} className="rounded-full border px-2 py-1 border-neutral-200 dark:border-neutral-800">{t}</span>
-        ))}
-      </div>
       <div className="mt-8">
         <Prose>{mdx as any}</Prose>
       </div>

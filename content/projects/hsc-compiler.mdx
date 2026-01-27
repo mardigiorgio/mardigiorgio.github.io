@@ -9,9 +9,9 @@ repo: "https://github.com/mardigiorgio/hsuScript"
 cover: "/images/projects/hsuscript/cover.jpg"
 ---
 
-## Why I Built It
+## Overview
 
-hsuScript started as my way to demystify "real" compiler pipelines by implementing every major stage by hand in portable C. I wanted a project small enough to read in a weekend but complete enough to show how lexing, parsing, analysis, and code generation cooperate to turn source text into a native binary.
+hsuScript is a teaching compiler written in C that implements a complete pipeline from source text to x86-64 binaries. It includes lexing, parsing, semantic analysis, code generation, and a bundled runtime.
 
 ```c
 fn main() {
@@ -58,6 +58,6 @@ fn main() {
 - End-to-end samples in `tests/exec` compile, link, and run `.hsc` programs, verifying both stdout and exit codes via `tools/runexec.sh`.
 - A top-level `tools/run_all_tests.sh` script stitches the suites together so one command exercises the entire pipeline.
 
-## What I Took Away
+## What I Learned
 
-Manually managing ABI details, stack alignment, and even simple string interning gave me a concrete feel for what full-size compilers hide behind abstractions. hsuScript is now my go-to reference when explaining how source code becomes a runnable binary without relying on existing toolchains to do the hard parts.
+Building each compiler stage from scratch clarified how ABI details, stack management, and code generation work without relying on existing abstractions. The project serves as a reference for understanding how source text becomes native code.

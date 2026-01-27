@@ -9,9 +9,9 @@ repo: "https://github.com/mardigiorgio/PiGuard"
 cover: "/images/projects/wipi/cover.jpg"
 ---
 
-## Why PiGuard Exists
+## Overview
 
-I wanted a wireless watchdog that could live on the same shelf as my home router, spot sketchy deauth storms, and still feel like a professional appliance—without paying for one. PiGuard is that weekend project turned open-source home WIDS: it runs on a spare Raspberry Pi, installs in a single command, and gives enthusiasts the observability and controls that consumer gear usually hides.
+PiGuard is a wireless intrusion detection system that runs on Raspberry Pi. It monitors Wi-Fi traffic for deauth attacks, SSID spoofing, and rogue access points. The system includes a Scapy-based packet capture engine, FastAPI control plane, and a Svelte dashboard.
 
 ## Detection Pipeline
 
@@ -34,4 +34,4 @@ I wanted a wireless watchdog that could live on the same shelf as my home router
 
 ## What I Learned
 
-Building PiGuard forced me to blend low-level 802.11 capture work with home-lab pragmatism. I now have a playbook for taking raw packet telemetry, hardening it for constrained hardware, and wrapping it in an operator experience that hobbyists actually reach for. The result is a deploy-anywhere WIDS that makes a Raspberry Pi feel like a purpose-built security appliance.
+The project required combining 802.11 packet capture with resource-constrained embedded systems. I learned how to optimize SQLite for high-throughput writes on limited hardware and how to design REST APIs that support both UI interactions and automation scripts.
