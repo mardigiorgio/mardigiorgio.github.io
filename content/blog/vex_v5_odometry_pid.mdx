@@ -3,14 +3,11 @@ title: "One-Wheel Odometry and PID on VEX V5"
 slug: "vex-v5-odometry-pid-math"
 excerpt: "Deriving the control math that powers my reusable VEX V5 chassis: PID loops, IMU fusion, and single-wheel odometry translated into match-ready code."
 date: 2025-09-08
-tags: ["robotics","control","math"]
 ---
 
 ## Why dig into the math?
 
 The VEX control stack in my repos looks like VEXcode boilerplate at first glance, but the chassis only behaves if the motion math behind it is right. This post breaks down the control theory I leaned on when I built a reusable drivetrain library: how each PID loop is shaped, how odometry works when you only have one passive tracking wheel plus an inertial sensor, and how those equations show up in code you can run on the V5 Brain.
-
----
 
 ## Hardware model
 
@@ -23,9 +20,8 @@ For the math, assume:
 
 The tracking wheel sits on the robot centerline, so it measures fore/aft translation only. Lateral motion relies on the IMU.
 
----
 
-## PID refresher
+##PID refresher
 
 Every motion primitive in the library boils down to a proportional-integral-derivative controller. Continuous form:
 
@@ -53,9 +49,8 @@ Clamping the integral prevents windup when the chassis saturates the motors. Eac
 
 Exit conditions stop a loop when both error and derivative sit inside tolerances for a minimum time, so the robot settles instead of ringing.
 
----
 
-## Odometry with one wheel + IMU
+##Odometry with one wheel + IMU
 
 Let the tracking wheel measure arc length `s` and the IMU measure yaw `theta`. Between loop iterations `k-1` and `k`:
 
@@ -88,9 +83,8 @@ Pose update:
 
 Even with a single wheel, this captures forward motion accurately and lets the IMU absorb drift. Adding lateral wheels later simply gives direct measurement of `Δy`.
 
----
 
-## Drive-to-point control
+##Drive-to-point control
 
 To drive toward field coordinate `(x_d, y_d)`:
 
@@ -117,9 +111,8 @@ Distance PID produces a forward voltage `u_drive`, heading PID produces a correc
 
 Near the target, I clamp `u_drive` to avoid overshoot and lower heading gains so the robot glides into place.
 
----
 
-## Example implementation sketch
+##Example implementation sketch
 
 ```cpp
 // inside a timed loop running every Ts seconds
@@ -137,9 +130,8 @@ chassis.drive_with_voltage(left_voltage, right_voltage);
 
 The helper `wrapRadians` keeps `e_theta` in `[-pi, pi]` to prevent the controller from commanding a 350 degree spin when 10 degrees the other way is faster.
 
----
 
-## Tuning workflow
+##Tuning workflow
 
 1. Start with `K_d = 0`. Raise `K_p` until the robot reaches the target quickly but overshoots slightly.
 2. Add `K_d` to dampen overshoot. Increase until the oscillation vanishes.
@@ -147,9 +139,8 @@ The helper `wrapRadians` keeps `e_theta` in `[-pi, pi]` to prevent the controlle
 4. Adjust exit tolerances so the competition robot holds points inside field tolerances without burning match time.
 5. Record loops at match voltage. Drivetrains sag under battery load; retune if the battery pack changes.
 
----
 
-## Lessons learned
+##Lessons learned
 
 - Math first, configuration second: once the equations were locked in, swapping wheel diameter or tracking offsets was a quick constant edit.
 - IMU fusion cleans up encoder slip, especially when driving over discs or triballs. Reset the gyro any time the robot is lifted.
